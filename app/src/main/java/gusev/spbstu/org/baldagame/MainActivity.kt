@@ -1,19 +1,13 @@
 package gusev.spbstu.org.baldagame
 
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.view.Gravity
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.*
-import gusev.spbstu.org.baldagame.R.id.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import org.jetbrains.anko.sdk25.coroutines.onKey
+
 
 class MainActivity : AppCompatActivity() {
 

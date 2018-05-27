@@ -2,6 +2,9 @@ package gusev.spbstu.org.baldagame
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.widget.TableLayout
+import org.jetbrains.anko.*
+
 
 class Point(val x: Int, val y: Int)
 
@@ -16,19 +19,25 @@ data class GameField(val firstPlayer: Player,
                      val secondPlayer: Player, var turn: Boolean) {
     var table = mutableListOf("     ", "     ", "     ", "     ", "     ")
     var database = listOf("")
+    var usedWords = listOf("")
 
-    fun newTurn(position: Point, letter: Char, word: String) {
-        newWord(position, word[word.length - 1])
-        if (turn) firstPlayer.addScore(word.length)
-        else secondPlayer.addScore(word.length)
-        turn = !turn
+    fun newTurn(position: Point, letter: Char, word: String): Boolean {
+        if (!usedWords.contains(word)) {
+            newWord(position, word[word.length - 1])
+            if (turn) firstPlayer.addScore(word.length)
+            else secondPlayer.addScore(word.length)
+            turn = !turn
+            return true
+        }
+        else return false
     }
+
 
     fun dbChecking(word: String): Boolean {
         return database.contains(word)
     }
 
-    fun staringWord(word: String) {
+    fun start(word: String) {
         table[2] = word
     }
 

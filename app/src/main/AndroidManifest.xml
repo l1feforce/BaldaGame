@@ -27,7 +27,14 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GameTableFull"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_game_table_full"
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".MainTable" />
+        <activity android:name=".Main3Activity"></activity>
     </application>
 
 </manifest>
