@@ -35,7 +35,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
         verticalLayout {
             button("Just start") {
                 onClick {
-                    startActivity<GameTable>("mainWord" to "балда",
+                    startActivity<GameFieldUI>("mainWord" to "балда",
                             "firstPlayerName" to "Игрок1",
                             "secondPlayerName" to "Игрок2")
                 }
@@ -58,7 +58,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                                 val okButton = button("OK") {
                                     onClick {
                                         if (mainWord.text.toString().length != 5) longToast("Error, enter word with lenght 5")
-                                        else startActivity<GameTable>("mainWord" to mainWord.text.toString(),
+                                        else startActivity<GameFieldUI>("mainWord" to mainWord.text.toString(),
                                                 "firstPlayerName" to firstPlayer.text.toString(),
                                                 "secondPlayerName" to secondPlayer.text.toString())
                                     }
