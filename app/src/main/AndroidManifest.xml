@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        android:colo
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameTable"></activity>
-        <activity android:name=".GameFieldUI"></activity>
+        <activity android:name=".GameFieldUI">
+            android:theme="@android:style/AppTheme.Fullscreen"
+        </activity>
     </application>
 
 </manifest>

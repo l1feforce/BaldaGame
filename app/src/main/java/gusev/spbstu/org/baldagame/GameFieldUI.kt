@@ -104,8 +104,8 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun afterPlayerTurn(flag: Boolean, field: GameField) {
-        if (flag) {
+    fun afterPlayerTurn(isTurnOkey: Boolean, field: GameField) {
+        if (isTurnOkey) {
             longToast("New word added:\nFirstPlayer score:${field.firstPlayer.score}\n" +
                     "SecondPlayer score:${field.secondPlayer.score}" +
                     "\nYour word: ${field.word}")
@@ -174,12 +174,12 @@ class GameFieldUI : AppCompatActivity() {
     }
 
     fun winnerChecking(field: GameField) {
-        var isFieldFull = false
+        var isFieldFull = true
         gameField.forEachChild {
             it as TableRow
             it.forEachChild {
                 it as TextView
-                if (it.text.isBlank()) isFieldFull = true
+                if (it.text.isBlank()) isFieldFull = false
             }
         }
         if (isFieldFull) {
@@ -200,18 +200,18 @@ class GameFieldUI : AppCompatActivity() {
                 negativeButton("No") {
                     System.exit(0)
                 }
-            }
+            }.show()
         }
         else {
             alert("${player.name} win! His score: ${player.score}" +
-                    "Want to play againg?") {
+                    "\nWant to play againg?") {
                 positiveButton("Yes") {
                     startNewGame()
                 }
                 negativeButton("No") {
                     System.exit(0)
                 }
-            }
+            }.show()
         }
     }
 

@@ -6,54 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".GameFieldUI">
 
-    <TableLayout
-        android:id="@+id/coorsTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </TableLayout>
-
-    <LinearLayout
-        android:id="@+id/namesOfPlayers"
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/words"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.071">
-
-        <TextView
-            android:id="@+id/firstPlayerName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/secondPlayerName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/words"
         android:layout_width="match_parent"
@@ -88,6 +40,52 @@
             tools:layout_editor_absoluteY="57dp">
 
         </LinearLayout>
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/coorsTable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/namesOfPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/firstPlayerName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:background="@drawable/my_border"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/secondPlayerName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:background="@drawable/my_border"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <TableLayout
