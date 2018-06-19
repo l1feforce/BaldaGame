@@ -103,7 +103,7 @@ class GameFieldUI : AppCompatActivity() {
                         if (!usedViews.contains(it)) field.word.append(it.text)
                         usedViews.add(it)
                         it.setBackgroundColor(Color.parseColor("#DF0101"))
-                        if (event.action == MotionEvent.ACTION_UP && field.word.isNotBlank()) {
+                        if (event.action == MotionEvent.ACTION_UP) {
                             coorsTable.setOnTouchListener(null)
                             setFieldBackground()
                             if (usedViews.contains(field.lastLetterView)) {
@@ -146,6 +146,7 @@ class GameFieldUI : AppCompatActivity() {
             toast("This word was used or don't exist" +
                     "\nYour word: ${field.word}")
         }
+        field.lastLetterView = null
     }
 
     fun timeIsOver(field: GameField){

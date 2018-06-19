@@ -47,26 +47,27 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                         title = "New game"
                         customView {
                             verticalLayout {
-                                val firstPlayer = editText() {
+                                val firstPlayer = editText("Player1") {
                                     setHint("First player name")
                                 }.lparams(weight = 1f, width = matchParent)
-                                val secondPlayer = editText() {
+                                val secondPlayer = editText("Player2") {
                                     setHint("Second player name")
                                 }.lparams(weight = 1f, width = matchParent)
-                                val mainWord = editText() {
+                                val mainWord = editText("балда") {
                                     setHint("Enter main word")
                                 }.lparams(weight = 1f, width = matchParent)
                                 var timeToTurn = ""
                                 val setTimer = button("Set timer") {
                                     onClick {
-                                        val options = listOf("1:00", "1:30", "2:00", "3:00")
+                                        val options = listOf("1:00", "1:30", "2:00", "3:00", "5:00")
                                         selector("Choose time to turn", options) { dialogInterface, i ->
                                             timeToTurn = when(options[i]) {
                                                 options[0] -> "60"
                                                 options[1] -> "90"
                                                 options[2] -> "120"
                                                 options[3] -> "180"
-                                                else -> ""
+                                                options[4] -> "300"
+                                                else -> "120"
                                             }
                                         }
                                     }
