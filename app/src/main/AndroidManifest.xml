@@ -16,8 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameFieldUI">
-            android:theme="@android:style/AppTheme.Fullscreen"
+        <activity android:name=".GameFieldUI"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

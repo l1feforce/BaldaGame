@@ -7,373 +7,417 @@
     tools:context=".GameFieldUI">
 
     <LinearLayout
-        android:id="@+id/words"
-        android:layout_width="match_parent"
-        android:layout_height="222dp"
-        android:layout_weight="4"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/gameField"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:id="@+id/firstPlayerScore"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="257dp"
-            tools:layout_editor_absoluteY="70dp">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/secondPlayerScore"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="57dp">
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <TableLayout
         android:id="@+id/coorsTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
-    </TableLayout>
-
-    <LinearLayout
-        android:id="@+id/namesOfPlayers"
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/firstPlayerName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/upperBar"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/gameField"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/coorsTable"
+            app:layout_constraintVertical_bias="0.51">
 
-        <TextView
-            android:id="@+id/secondPlayerName"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/namesOfPlayers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp">
+
+                <TextView
+                    android:id="@+id/firstPlayerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/secondPlayerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/statisticBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="93dp">
+
+                <TextView
+                    android:id="@+id/firstPlayerScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/timeRemains"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="2:00"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/secondPlayerScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/words"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:baselineAligned="false"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="123dp">
+
+                <LinearLayout
+                    android:id="@+id/firstPlayerWords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:orientation="vertical"
+                    tools:layout_editor_absoluteX="257dp"
+                    tools:layout_editor_absoluteY="70dp">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/secondPlayerWords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:orientation="vertical"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="57dp">
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/gameField"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/my_border"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TableRow
+                android:id="@+id/row0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/cell00"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="A"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell01"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="A"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell02"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="A"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell03"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="A"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell04"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:text="A"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/cell10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell13"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/cell20"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell21"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell22"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell23"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/cell30"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell31"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell32"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell33"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell34"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/cell40"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell41"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell42"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell43"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:id="@+id/cell44"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/my_border"
+                    android:textAlignment="center"
+                    android:textSize="45sp" />
+
+            </TableRow>
+
+        </TableLayout>
+
     </LinearLayout>
-
-    <TableLayout
-        android:id="@+id/gameField"
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TableRow
-            android:id="@+id/row0"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/cell00"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:text="A"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell01"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:text="A"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell02"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:text="A"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell03"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:text="A"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell04"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:text="A"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/cell10"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell11"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell12"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell13"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell14"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/cell20"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell21"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell22"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell23"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell24"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/cell30"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell31"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell32"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell33"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell34"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/row4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/cell40"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell41"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell42"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell43"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/cell44"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/my_border"
-                android:textAlignment="center"
-                android:textSize="45sp" />
-
-        </TableRow>
-
-    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>

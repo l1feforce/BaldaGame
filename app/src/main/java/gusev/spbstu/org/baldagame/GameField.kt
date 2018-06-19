@@ -2,6 +2,7 @@ package gusev.spbstu.org.baldagame
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -30,14 +31,16 @@ data class GameField(val firstPlayer: Player,
     var table = mutableListOf("     ", "     ", "     ", "     ", "     ")
     var database = listOf("")
     val usedWords = mutableListOf("")
-    var lastLetter = ""
     var lastLetterView: TextView? = null
     var word = StringBuilder("")
+    var timeToTurn = 0L
 
-    fun newTurn(): Boolean {
-        if (!usedWordsChecking(word.toString()) && dbChecking(word.toString())) {
-            if (turn) firstPlayer.addScore(word.length)
-            else secondPlayer.addScore(word.length)
+    fun newTurn(isTimerEnd: Boolean): Boolean {
+        if (!usedWordsChecking(word.toString()) && dbChecking(word.toString()) || isTimerEnd) {
+            if (word.length!=1) {
+                if (turn) firstPlayer.addScore(word.length)
+                else secondPlayer.addScore(word.length)
+            }
             turn = !turn
             return true
         } else {

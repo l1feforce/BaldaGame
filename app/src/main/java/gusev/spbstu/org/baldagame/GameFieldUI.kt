@@ -3,6 +3,7 @@ package gusev.spbstu.org.baldagame
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TableRow
@@ -12,6 +13,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class GameFieldUI : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +25,30 @@ class GameFieldUI : AppCompatActivity() {
                 listOf(cell40, cell41, cell42, cell43, cell44))
         val field = gamePreparing(textViews)
         fullScreenRefresh()
-        addingNewLetter(field)
+        addingNewLetter(field, startTimer(field).start())
     }
 
-    fun addingNewLetter(field: GameField) {
+    fun startTimer(field: GameField): CountDownTimer {
+        lateinit var timer: CountDownTimer
+        timer = object : CountDownTimer(field.timeToTurn * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds = (millisUntilFinished + 1000)/1000 % 60
+                val minutes = (millisUntilFinished + 1000)/1000 / 60
+                timeRemains.text = String.format("%02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                timer.cancel()
+                timeIsOver(field)
+                timer.start()
+                addingNewLetter(field, timer)
+            }
+        }
+        return timer
+    }
+
+    fun addingNewLetter(field: GameField, timer: CountDownTimer) {
+        fullScreenRefresh()
         gameField.forEachChild {
             val row = it as TableRow
             row.forEachChild {
@@ -34,7 +56,6 @@ class GameFieldUI : AppCompatActivity() {
                 if (textView.text.isBlank()) {
                     textView.setOnClickListener {
                         val text = it as TextView
-                        field.lastLetter = text.text.toString()
                         alert("Enter letter") {
                             customView {
                                 linearLayout {
@@ -47,11 +68,10 @@ class GameFieldUI : AppCompatActivity() {
                                     positiveButton("OK") {
                                         if (letter.text.length == 1) {
                                             text.text = letter.text.toString().toUpperCase()
-                                            field.lastLetter = letter.text.toString()
                                             field.lastLetterView = text
                                             fieldIsClickable(false)
                                             fullScreenRefresh()
-                                            swipeTracking(field)
+                                            swipeTracking(field, timer)
                                         } else toast("Enter one letter")
                                     }
                                     negativeButton("Cancel") {
@@ -69,7 +89,7 @@ class GameFieldUI : AppCompatActivity() {
     }
 
 
-    fun swipeTracking(field: GameField) {
+    fun swipeTracking(field: GameField, timer: CountDownTimer) {
         val usedViews = mutableListOf<TextView>()
         coorsTable.setOnTouchListener { view, event ->
             gameField.forEachChild {
@@ -87,7 +107,7 @@ class GameFieldUI : AppCompatActivity() {
                             coorsTable.setOnTouchListener(null)
                             setFieldBackground()
                             if (usedViews.contains(field.lastLetterView)) {
-                                afterPlayerTurn(field.newTurn(), field)
+                                afterPlayerTurn(field.newTurn(false), field, timer)
                             } else {
                                 field.lastLetterView?.text = ""
                                 field.lastLetterView?.isClickable = true
@@ -95,7 +115,7 @@ class GameFieldUI : AppCompatActivity() {
                             }
                             field.word = StringBuilder("")
                             usedViews.removeAll(usedViews)
-                            addingNewLetter(field)
+                            addingNewLetter(field, timer)
                         }
                     }
                 }
@@ -104,7 +124,7 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun afterPlayerTurn(isTurnOkey: Boolean, field: GameField) {
+    fun afterPlayerTurn(isTurnOkey: Boolean, field: GameField, timer: CountDownTimer) {
         if (isTurnOkey) {
             longToast("New word added:\nFirstPlayer score:${field.firstPlayer.score}\n" +
                     "SecondPlayer score:${field.secondPlayer.score}" +
@@ -114,16 +134,36 @@ class GameFieldUI : AppCompatActivity() {
             newTextView.topPadding = dip(5)
             val textViewText = field.word.toString() + "    ${field.word.length}"
             newTextView.text = textViewText
-            if (!field.turn) firstPlayerScore.addView(newTextView)
-            else secondPlayerScore.addView(newTextView)
+            if (!field.turn) firstPlayerWords.addView(newTextView)
+            else secondPlayerWords.addView(newTextView)
             field.usedWords.add(field.word.toString().toLowerCase())
             scoreRefresh(field)
+            timer.cancel()
+            timer.start()
             winnerChecking(field)
         } else {
             field.lastLetterView?.text = ""
             toast("This word was used or don't exist" +
                     "\nYour word: ${field.word}")
         }
+    }
+
+    fun timeIsOver(field: GameField){
+        longToast("Time is over")
+        val newTextView = TextView(this)
+        newTextView.leftPadding = dip(10)
+        newTextView.topPadding = dip(5)
+        newTextView.text = "-"
+        field.word = StringBuilder("-")
+        field.newTurn(true)
+        if (!field.turn) firstPlayerWords.addView(newTextView)
+        else secondPlayerWords.addView(newTextView)
+        scoreRefresh(field)
+        field.word = StringBuilder("")
+        coorsTable.setOnTouchListener(null)
+        setFieldBackground()
+        field.lastLetterView?.text = ""
+        field.lastLetterView?.isClickable = true
     }
 
     fun setFieldBackground() {
@@ -148,15 +188,20 @@ class GameFieldUI : AppCompatActivity() {
         val firstPlayer = intent.getStringExtra("firstPlayerName") ?: ""
         val secondPlayer = intent.getStringExtra("secondPlayerName") ?: ""
         val mainWord: String = intent.getStringExtra("mainWord") ?: ""
+        val timeToTurn = intent.getStringExtra("timeToTurn") ?: ""
         val allWords = application.assets.open("singular.txt").bufferedReader().use {
             it.readLines()
         }
+
         val field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true)
         field.usedWords.add(mainWord.toLowerCase())
         field.start(mainWord)
+        field.timeToTurn = timeToTurn.toLong()
         field.database = allWords
         fieldRefresh(field, textViews)
         scoreRefresh(field)
+        firstPlayerName.text = firstPlayer
+        secondPlayerName.text = secondPlayer
         return field
     }
 
@@ -169,8 +214,8 @@ class GameFieldUI : AppCompatActivity() {
     }
 
     fun scoreRefresh(field: GameField) {
-        firstPlayerName.text = "${field.firstPlayer.name} - ${field.firstPlayer.score}"
-        secondPlayerName.text = "${field.secondPlayer.name} - ${field.secondPlayer.score}"
+        firstPlayerScore.text = field.firstPlayer.score.toString()
+        secondPlayerScore.text = field.secondPlayer.score.toString()
     }
 
     fun winnerChecking(field: GameField) {
@@ -192,7 +237,7 @@ class GameFieldUI : AppCompatActivity() {
     }
 
     fun gameFinish(player: Player?) {
-        if (player == null){
+        if (player == null) {
             alert("Drow! Want to play again?") {
                 positiveButton("Yes") {
                     startNewGame()
@@ -201,8 +246,7 @@ class GameFieldUI : AppCompatActivity() {
                     System.exit(0)
                 }
             }.show()
-        }
-        else {
+        } else {
             alert("${player.name} win! His score: ${player.score}" +
                     "\nWant to play againg?") {
                 positiveButton("Yes") {
@@ -215,7 +259,7 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun startNewGame(){
+    fun startNewGame() {
         alert {
             title = "New game"
             customView {

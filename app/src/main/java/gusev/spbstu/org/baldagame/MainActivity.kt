@@ -37,7 +37,8 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                 onClick {
                     startActivity<GameFieldUI>("mainWord" to "балда",
                             "firstPlayerName" to "Игрок1",
-                            "secondPlayerName" to "Игрок2")
+                            "secondPlayerName" to "Игрок2",
+                            "timeToTurn" to "120")
                 }
             }
             button("2 players") {
@@ -55,12 +56,28 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                                 val mainWord = editText() {
                                     setHint("Enter main word")
                                 }.lparams(weight = 1f, width = matchParent)
+                                var timeToTurn = ""
+                                val setTimer = button("Set timer") {
+                                    onClick {
+                                        val options = listOf("1:00", "1:30", "2:00", "3:00")
+                                        selector("Choose time to turn", options) { dialogInterface, i ->
+                                            timeToTurn = when(options[i]) {
+                                                options[0] -> "60"
+                                                options[1] -> "90"
+                                                options[2] -> "120"
+                                                options[3] -> "180"
+                                                else -> ""
+                                            }
+                                        }
+                                    }
+                                }.lparams(weight = 1f, width = matchParent)
                                 val okButton = button("OK") {
                                     onClick {
                                         if (mainWord.text.toString().length != 5) longToast("Error, enter word with lenght 5")
                                         else startActivity<GameFieldUI>("mainWord" to mainWord.text.toString(),
                                                 "firstPlayerName" to firstPlayer.text.toString(),
-                                                "secondPlayerName" to secondPlayer.text.toString())
+                                                "secondPlayerName" to secondPlayer.text.toString(),
+                                                "timeToTurn" to timeToTurn)
                                     }
                                 }.lparams(weight = 4f, width = matchParent)
                                 padding = dip(16)
