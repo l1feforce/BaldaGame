@@ -14,7 +14,6 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class GameFieldUI : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_field_ui)
@@ -131,11 +130,19 @@ class GameFieldUI : AppCompatActivity() {
                     "\nYour word: ${field.word}")
             val newTextView = TextView(this)
             newTextView.leftPadding = dip(10)
-            newTextView.topPadding = dip(5)
+            newTextView.topPadding = dip(2)
             val textViewText = field.word.toString() + "    ${field.word.length}"
             newTextView.text = textViewText
-            if (!field.turn) firstPlayerWords.addView(newTextView)
-            else secondPlayerWords.addView(newTextView)
+            if (!field.turn) {
+                firstPlayerWords.addView(newTextView)
+                firstPlayerName.setBackgroundResource(R.drawable.my_border)
+                secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+            }
+            else {
+                firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+                secondPlayerName.setBackgroundResource(R.drawable.my_border)
+                secondPlayerWords.addView(newTextView)
+            }
             field.usedWords.add(field.word.toString().toLowerCase())
             scoreRefresh(field)
             timer.cancel()
@@ -157,8 +164,16 @@ class GameFieldUI : AppCompatActivity() {
         newTextView.text = "-"
         field.word = StringBuilder("-")
         field.newTurn(true)
-        if (!field.turn) firstPlayerWords.addView(newTextView)
-        else secondPlayerWords.addView(newTextView)
+        if (!field.turn) {
+            firstPlayerWords.addView(newTextView)
+            firstPlayerName.setBackgroundResource(R.drawable.my_border)
+            secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+        }
+        else {
+            firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+            secondPlayerName.setBackgroundResource(R.drawable.my_border)
+            secondPlayerWords.addView(newTextView)
+        }
         scoreRefresh(field)
         field.word = StringBuilder("")
         coorsTable.setOnTouchListener(null)
@@ -202,6 +217,7 @@ class GameFieldUI : AppCompatActivity() {
         fieldRefresh(field, textViews)
         scoreRefresh(field)
         firstPlayerName.text = firstPlayer
+        firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         secondPlayerName.text = secondPlayer
         return field
     }

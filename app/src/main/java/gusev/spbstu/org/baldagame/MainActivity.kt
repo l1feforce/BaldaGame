@@ -2,11 +2,13 @@ package gusev.spbstu.org.baldagame
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         MainActivityUi().setContentView(this)
     }
+
 }
 
 
@@ -29,6 +32,17 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                 v.gravity = Gravity.CENTER
             }
         }
+    }
+
+
+    fun randomWord(): String {
+        val input = this.javaClass.getClassLoader().getResourceAsStream("assets/singular.txt")
+        val allWords = input.bufferedReader().use {
+            it.readLines()
+        }
+        val filteredWords = allWords.filter { it.length == 5 }
+        val random = Random().nextInt(filteredWords.size)
+        return filteredWords[random]
     }
 
     override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
@@ -56,6 +70,12 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                                 val mainWord = editText("балда") {
                                     setHint("Enter main word")
                                 }.lparams(weight = 1f, width = matchParent)
+                                val randomWord = button("Random word") {
+                                    onClick {
+                                        val randomWord = randomWord()
+                                        mainWord.setText(randomWord)
+                                    }
+                                }
                                 var timeToTurn = ""
                                 val setTimer = button("Set timer") {
                                     onClick {
