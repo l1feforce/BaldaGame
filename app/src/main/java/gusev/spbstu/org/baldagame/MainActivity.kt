@@ -52,7 +52,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                     startActivity<GameFieldUI>("mainWord" to "балда",
                             "firstPlayerName" to "Игрок1",
                             "secondPlayerName" to "Игрок2",
-                            "timeToTurn" to "120")
+                            "timeToTurn" to "10")
                 }
             }
             button("2 players") {

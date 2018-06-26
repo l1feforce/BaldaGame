@@ -14,6 +14,9 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class GameFieldUI : AppCompatActivity() {
 
+    lateinit var timer: CountDownTimer
+    lateinit var field: GameField
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_field_ui)
@@ -22,32 +25,50 @@ class GameFieldUI : AppCompatActivity() {
                 listOf(cell20, cell21, cell22, cell23, cell24),
                 listOf(cell30, cell31, cell32, cell33, cell34),
                 listOf(cell40, cell41, cell42, cell43, cell44))
-        val field = gamePreparing(textViews)
-        fullScreenRefresh()
-        addingNewLetter(field, startTimer(field).start())
+        gamePreparing(textViews)
+        makeFullScreenRefresh()
+        addingNewLetter()
     }
 
-    fun startTimer(field: GameField): CountDownTimer {
-        lateinit var timer: CountDownTimer
-        timer = object : CountDownTimer(field.timeToTurn * 1000, 1000) {
+    override fun onPause() {
+        super.onPause()
+        timer.cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (timeRemains.text.toString() != "123") {
+            timer.cancel()
+            val millisRemains = timeRemains.text.split(":")
+            val seconds = millisRemains[1].toLong() * 1000
+            val minutes = millisRemains[0].toLong() * 60 * 1000
+            timer = startTimer(seconds + minutes)
+            timer.start()
+            makeFullScreenRefresh()
+        }
+    }
+
+    fun startTimer(millisRemains: Long): CountDownTimer {
+        timer = object : CountDownTimer(millisRemains, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val seconds = (millisUntilFinished + 1000)/1000 % 60
-                val minutes = (millisUntilFinished + 1000)/1000 / 60
+                val seconds = (millisUntilFinished + 1000) / 1000 % 60
+                val minutes = (millisUntilFinished + 1000) / 1000 / 60
                 timeRemains.text = String.format("%02d:%02d", minutes, seconds)
             }
 
             override fun onFinish() {
                 timer.cancel()
-                timeIsOver(field)
-                timer.start()
-                addingNewLetter(field, timer)
+                timeIsOver()
+                timer = startTimer(field.timeToTurn * 1000)
+                addingNewLetter()
             }
+
         }
         return timer
     }
 
-    fun addingNewLetter(field: GameField, timer: CountDownTimer) {
-        fullScreenRefresh()
+    fun addingNewLetter() {
+        makeFullScreenRefresh()
         gameField.forEachChild {
             val row = it as TableRow
             row.forEachChild {
@@ -69,13 +90,13 @@ class GameFieldUI : AppCompatActivity() {
                                             text.text = letter.text.toString().toUpperCase()
                                             field.lastLetterView = text
                                             fieldIsClickable(false)
-                                            fullScreenRefresh()
-                                            swipeTracking(field, timer)
+                                            swipeTracking()
                                         } else toast("Enter one letter")
+                                        makeFullScreenRefresh()
                                     }
                                     negativeButton("Cancel") {
                                         setFieldBackground()
-                                        fullScreenRefresh()
+                                        makeFullScreenRefresh()
                                     }
                                 }
                             }
@@ -88,7 +109,7 @@ class GameFieldUI : AppCompatActivity() {
     }
 
 
-    fun swipeTracking(field: GameField, timer: CountDownTimer) {
+    fun swipeTracking() {
         val usedViews = mutableListOf<TextView>()
         coorsTable.setOnTouchListener { view, event ->
             gameField.forEachChild {
@@ -106,7 +127,7 @@ class GameFieldUI : AppCompatActivity() {
                             coorsTable.setOnTouchListener(null)
                             setFieldBackground()
                             if (usedViews.contains(field.lastLetterView)) {
-                                afterPlayerTurn(field.newTurn(false), field, timer)
+                                afterPlayerTurn(field.newTurn(false))
                             } else {
                                 field.lastLetterView?.text = ""
                                 field.lastLetterView?.isClickable = true
@@ -114,7 +135,7 @@ class GameFieldUI : AppCompatActivity() {
                             }
                             field.word = StringBuilder("")
                             usedViews.removeAll(usedViews)
-                            addingNewLetter(field, timer)
+                            addingNewLetter()
                         }
                     }
                 }
@@ -123,7 +144,7 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun afterPlayerTurn(isTurnOkey: Boolean, field: GameField, timer: CountDownTimer) {
+    fun afterPlayerTurn(isTurnOkey: Boolean) {
         if (isTurnOkey) {
             longToast("New word added:\nFirstPlayer score:${field.firstPlayer.score}\n" +
                     "SecondPlayer score:${field.secondPlayer.score}" +
@@ -137,17 +158,16 @@ class GameFieldUI : AppCompatActivity() {
                 firstPlayerWords.addView(newTextView)
                 firstPlayerName.setBackgroundResource(R.drawable.my_border)
                 secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
-            }
-            else {
+            } else {
                 firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
                 secondPlayerName.setBackgroundResource(R.drawable.my_border)
                 secondPlayerWords.addView(newTextView)
             }
             field.usedWords.add(field.word.toString().toLowerCase())
-            scoreRefresh(field)
+            scoreRefresh()
             timer.cancel()
-            timer.start()
-            winnerChecking(field)
+            timer = startTimer(field.timeToTurn * 1000).start()
+            winnerChecking()
         } else {
             field.lastLetterView?.text = ""
             toast("This word was used or don't exist" +
@@ -156,7 +176,7 @@ class GameFieldUI : AppCompatActivity() {
         field.lastLetterView = null
     }
 
-    fun timeIsOver(field: GameField){
+    fun timeIsOver() {
         longToast("Time is over")
         val newTextView = TextView(this)
         newTextView.leftPadding = dip(10)
@@ -168,13 +188,12 @@ class GameFieldUI : AppCompatActivity() {
             firstPlayerWords.addView(newTextView)
             firstPlayerName.setBackgroundResource(R.drawable.my_border)
             secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
-        }
-        else {
+        } else {
             firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
             secondPlayerName.setBackgroundResource(R.drawable.my_border)
             secondPlayerWords.addView(newTextView)
         }
-        scoreRefresh(field)
+        scoreRefresh()
         field.word = StringBuilder("")
         coorsTable.setOnTouchListener(null)
         setFieldBackground()
@@ -200,7 +219,7 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun gamePreparing(textViews: List<List<TextView>>): GameField {
+    fun gamePreparing(textViews: List<List<TextView>>) {
         val firstPlayer = intent.getStringExtra("firstPlayerName") ?: ""
         val secondPlayer = intent.getStringExtra("secondPlayerName") ?: ""
         val mainWord: String = intent.getStringExtra("mainWord") ?: ""
@@ -208,21 +227,20 @@ class GameFieldUI : AppCompatActivity() {
         val allWords = application.assets.open("singular.txt").bufferedReader().use {
             it.readLines()
         }
-
-        val field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true)
+        field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true)
         field.usedWords.add(mainWord.toLowerCase())
         field.start(mainWord)
         field.timeToTurn = timeToTurn.toLong()
         field.database = allWords
-        fieldRefresh(field, textViews)
-        scoreRefresh(field)
+        timer = startTimer(field.timeToTurn*1000).start()
+        fieldRefresh(textViews)
+        scoreRefresh()
         firstPlayerName.text = firstPlayer
         firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         secondPlayerName.text = secondPlayer
-        return field
     }
 
-    fun fieldRefresh(field: GameField, textViews: List<List<TextView>>) {
+    fun fieldRefresh(textViews: List<List<TextView>>) {
         textViews.forEachIndexed { i, it ->
             it.forEachIndexed { k, textView ->
                 textView.text = field.table[i][k].toString()
@@ -230,12 +248,12 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun scoreRefresh(field: GameField) {
+    fun scoreRefresh() {
         firstPlayerScore.text = field.firstPlayer.score.toString()
         secondPlayerScore.text = field.secondPlayer.score.toString()
     }
 
-    fun winnerChecking(field: GameField) {
+    fun winnerChecking() {
         var isFieldFull = true
         gameField.forEachChild {
             it as TableRow
@@ -305,7 +323,7 @@ class GameFieldUI : AppCompatActivity() {
         }.show()
     }
 
-    fun fullScreenRefresh() {
+    fun makeFullScreenRefresh() {
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
