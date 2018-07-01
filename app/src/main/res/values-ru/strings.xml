@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BaldaGame</string>
+    <string name="adding_letter_alert">Добавьте новую букву</string>
+    <string name="new_letter_wrong_size_message">Введите одну букву</string>
+    <string name="negative_button_alert">Отмена</string>
+    <string name="must_use_new_letter_message">Вы должны использовать введеную букву</string>
+    <string name="new_word_added_message">Новое слово добавлено</string>
+    <string name="score">счет</string>
+    <string name="your_word">Ваше слово</string>
+    <string name="wrong_word_message">Это слово уже было использовано или не существует</string>
+    <string name="time_is_over">Время закончилось</string>
+    <string name="draw">Ничья.</string>
+    <string name="want_to_play_again">Хотите сыграть еще?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="winner_message">" победил! Счет: "</string>
+    <string name="two_players">2 игрока</string>
+    <string name="new_game">Новая игра</string>
+    <string name="first_player_name">Имя первого игрока</string>
+    <string name="second_player_name">Имя второго ирока</string>
+    <string name="main_word">Введите основное слово</string>
+    <string name="random_word">Случайное слово</string>
+    <string name="set_timer">Время на ход</string>
+    <string name="time_to_turn">Выберите время на ход</string>
+    <string name="wrong_word_length">Ошибка, слово должно быть длинной 5</string>
+    <string name="settings">Настройки</string>
+    <string name="exit">Выход</string>
+</resources>

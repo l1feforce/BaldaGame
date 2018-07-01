@@ -55,32 +55,31 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                             "timeToTurn" to "10")
                 }
             }
-            button("2 players") {
+            button(R.string.two_players) {
                 onClick {
-                    alert {
-                        title = "New game"
+                    alert(R.string.new_game) {
                         customView {
                             verticalLayout {
                                 val firstPlayer = editText("Player1") {
-                                    setHint("First player name")
+                                    setHint(R.string.first_player_name)
                                 }.lparams(weight = 1f, width = matchParent)
                                 val secondPlayer = editText("Player2") {
-                                    setHint("Second player name")
+                                    setHint(R.string.second_player_name)
                                 }.lparams(weight = 1f, width = matchParent)
                                 val mainWord = editText("балда") {
-                                    setHint("Enter main word")
+                                    setHint(R.string.main_word)
                                 }.lparams(weight = 1f, width = matchParent)
-                                val randomWord = button("Random word") {
+                                val randomWord = button(R.string.random_word) {
                                     onClick {
                                         val randomWord = randomWord()
                                         mainWord.setText(randomWord)
                                     }
                                 }
-                                var timeToTurn = ""
-                                val setTimer = button("Set timer") {
+                                var timeToTurn = "120"
+                                val setTimer = button(R.string.set_timer) {
                                     onClick {
                                         val options = listOf("1:00", "1:30", "2:00", "3:00", "5:00")
-                                        selector("Choose time to turn", options) { dialogInterface, i ->
+                                        selector(resources.getString(R.string.time_to_turn), options) { _, i ->
                                             timeToTurn = when(options[i]) {
                                                 options[0] -> "60"
                                                 options[1] -> "90"
@@ -94,7 +93,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                                 }.lparams(weight = 1f, width = matchParent)
                                 val okButton = button("OK") {
                                     onClick {
-                                        if (mainWord.text.toString().length != 5) longToast("Error, enter word with lenght 5")
+                                        if (mainWord.text.toString().length != 5) longToast(R.string.wrong_word_length)
                                         else startActivity<GameFieldUI>("mainWord" to mainWord.text.toString(),
                                                 "firstPlayerName" to firstPlayer.text.toString(),
                                                 "secondPlayerName" to secondPlayer.text.toString(),
@@ -114,7 +113,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                 gravity = Gravity.CENTER
             }
 
-            button("Settings") {
+            button(R.string.settings) {
                 onClick {
                 }
             }.lparams {
@@ -124,7 +123,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
                 gravity = Gravity.CENTER
             }
 
-            button("Exit") {
+            button(R.string.exit) {
                 onClick {
                     System.exit(0);
                 }

@@ -11,6 +11,8 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_game_field_ui.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 
 class GameFieldUI : AppCompatActivity() {
 
@@ -26,7 +28,7 @@ class GameFieldUI : AppCompatActivity() {
                 listOf(cell30, cell31, cell32, cell33, cell34),
                 listOf(cell40, cell41, cell42, cell43, cell44))
         gamePreparing(textViews)
-        makeFullScreenRefresh()
+        makeFullScreen()
         addingNewLetter()
     }
 
@@ -37,6 +39,7 @@ class GameFieldUI : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        makeFullScreen()
         if (timeRemains.text.toString() != "123") {
             timer.cancel()
             val millisRemains = timeRemains.text.split(":")
@@ -44,7 +47,6 @@ class GameFieldUI : AppCompatActivity() {
             val minutes = millisRemains[0].toLong() * 60 * 1000
             timer = startTimer(seconds + minutes)
             timer.start()
-            makeFullScreenRefresh()
         }
     }
 
@@ -57,9 +59,9 @@ class GameFieldUI : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                timer.cancel()
                 timeIsOver()
-                timer = startTimer(field.timeToTurn * 1000)
+                timer.cancel()
+                timer = startTimer(field.timeToTurn * 1000).start()
                 addingNewLetter()
             }
 
@@ -68,35 +70,35 @@ class GameFieldUI : AppCompatActivity() {
     }
 
     fun addingNewLetter() {
-        makeFullScreenRefresh()
+        makeFullScreen()
         gameField.forEachChild {
-            val row = it as TableRow
-            row.forEachChild {
-                val textView = it as TextView
-                if (textView.text.isBlank()) {
-                    textView.setOnClickListener {
-                        val text = it as TextView
-                        alert("Enter letter") {
+            it as TableRow
+            it.forEachChild {
+                it as TextView
+                if (it.text.isBlank()) {
+                    it.setOnClickListener {
+                        it as TextView
+                        field.lastLetterTextView = it
+                        alert(R.string.adding_letter_alert) {
                             customView {
                                 linearLayout {
-                                    val letter = editText() {}.lparams {
+                                    val editTextForLetter = editText() {}.lparams {
                                         padding = dip(16)
                                         weight = 1f
                                         width = matchParent
                                     }
                                     padding = dip(16)
                                     positiveButton("OK") {
-                                        if (letter.text.length == 1) {
-                                            text.text = letter.text.toString().toUpperCase()
-                                            field.lastLetterView = text
+                                        if (editTextForLetter.text.length == 1) {
+                                            field.addNewLetter(editTextForLetter.text.toString())
                                             fieldIsClickable(false)
                                             swipeTracking()
-                                        } else toast("Enter one letter")
-                                        makeFullScreenRefresh()
+                                        } else toast(R.string.new_letter_wrong_size_message)
+                                        makeFullScreen()
                                     }
-                                    negativeButton("Cancel") {
-                                        setFieldBackground()
-                                        makeFullScreenRefresh()
+                                    negativeButton(R.string.negative_button_alert) {
+                                        setDefaultFieldBackground()
+                                        makeFullScreen()
                                     }
                                 }
                             }
@@ -115,23 +117,23 @@ class GameFieldUI : AppCompatActivity() {
             gameField.forEachChild {
                 val row = it as TableRow
                 row.forEachChild {
-                    val coor = IntArray(2)
-                    it.getLocationOnScreen(coor)
-                    if (event.x.toInt() > coor[0] && event.x.toInt() < coor[0] + it.width &&
-                            event.y.toInt() > coor[1] && event.y.toInt() < coor[1] + it.height) {
+                    val viewCoordinates = IntArray(2)
+                    it.getLocationOnScreen(viewCoordinates)
+                    if (event.x.toInt() > viewCoordinates[0] && event.x.toInt() < viewCoordinates[0] + it.width &&
+                            event.y.toInt() > viewCoordinates[1] && event.y.toInt() < viewCoordinates[1] + it.height) {
                         it as TextView
                         if (!usedViews.contains(it)) field.word.append(it.text)
                         usedViews.add(it)
                         it.setBackgroundColor(Color.parseColor("#DF0101"))
                         if (event.action == MotionEvent.ACTION_UP) {
                             coorsTable.setOnTouchListener(null)
-                            setFieldBackground()
-                            if (usedViews.contains(field.lastLetterView)) {
+                            setDefaultFieldBackground()
+                            if (usedViews.contains(field.lastLetterTextView)) {
                                 afterPlayerTurn(field.newTurn(false))
                             } else {
-                                field.lastLetterView?.text = ""
-                                field.lastLetterView?.isClickable = true
-                                toast("You must use entered letter")
+                                field.lastLetterTextView?.text = ""
+                                field.lastLetterTextView?.isClickable = true
+                                toast(R.string.must_use_new_letter_message)
                             }
                             field.word = StringBuilder("")
                             usedViews.removeAll(usedViews)
@@ -144,24 +146,16 @@ class GameFieldUI : AppCompatActivity() {
         }
     }
 
-    fun afterPlayerTurn(isTurnOkey: Boolean) {
-        if (isTurnOkey) {
-            longToast("New word added:\nFirstPlayer score:${field.firstPlayer.score}\n" +
-                    "SecondPlayer score:${field.secondPlayer.score}" +
-                    "\nYour word: ${field.word}")
-            val newTextView = TextView(this)
-            newTextView.leftPadding = dip(10)
-            newTextView.topPadding = dip(2)
-            val textViewText = field.word.toString() + "    ${field.word.length}"
-            newTextView.text = textViewText
+    fun afterPlayerTurn(isTurnOkay: Boolean) {
+        if (isTurnOkay) {
+            longToast("${resources.getString(R.string.new_word_added_message)}: ${field.word}")
+            addingNewWordToScore(false)
             if (!field.turn) {
-                firstPlayerWords.addView(newTextView)
                 firstPlayerName.setBackgroundResource(R.drawable.my_border)
                 secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
             } else {
                 firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
                 secondPlayerName.setBackgroundResource(R.drawable.my_border)
-                secondPlayerWords.addView(newTextView)
             }
             field.usedWords.add(field.word.toString().toLowerCase())
             scoreRefresh()
@@ -169,39 +163,54 @@ class GameFieldUI : AppCompatActivity() {
             timer = startTimer(field.timeToTurn * 1000).start()
             winnerChecking()
         } else {
-            field.lastLetterView?.text = ""
-            toast("This word was used or don't exist" +
-                    "\nYour word: ${field.word}")
+            field.lastLetterTextView?.text = ""
+            //toast(resources.getString(R.string.wrong_word_message)+": ${field.word}")
+            coorsTable.snack(resources.getString(R.string.wrong_word_message)+": ${field.word}") {
+                action("Add word") {
+                    try {
+                        val outputStream: FileOutputStream = openFileOutput("assets/singular.txt", 0)
+                        val writer = OutputStreamWriter(outputStream)
+                        writer.write("\nбаа")
+                        writer.close()
+                    }
+                    catch (e: Exception) {
+                        toast("${e.javaClass}")
+                    }
+                }
+            }
         }
-        field.lastLetterView = null
+        field.lastLetterTextView = null
+    }
+
+    fun addingNewWordToScore(isTimerEnd: Boolean){
+        val newTextView = TextView(this)
+        newTextView.leftPadding = dip(10)
+        newTextView.topPadding = dip(2)
+        newTextView.text = if (!isTimerEnd) field.word.toString() + "    ${field.word.length}"
+        else "-"
+        if (!field.turn && !isTimerEnd) firstPlayerWords.addView(newTextView)
+        else secondPlayerWords.addView(newTextView)
     }
 
     fun timeIsOver() {
-        longToast("Time is over")
-        val newTextView = TextView(this)
-        newTextView.leftPadding = dip(10)
-        newTextView.topPadding = dip(5)
-        newTextView.text = "-"
-        field.word = StringBuilder("-")
+        longToast(R.string.time_is_over)
+        addingNewWordToScore(true)
         field.newTurn(true)
         if (!field.turn) {
-            firstPlayerWords.addView(newTextView)
             firstPlayerName.setBackgroundResource(R.drawable.my_border)
             secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         } else {
             firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
             secondPlayerName.setBackgroundResource(R.drawable.my_border)
-            secondPlayerWords.addView(newTextView)
         }
         scoreRefresh()
-        field.word = StringBuilder("")
         coorsTable.setOnTouchListener(null)
-        setFieldBackground()
-        field.lastLetterView?.text = ""
-        field.lastLetterView?.isClickable = true
+        setDefaultFieldBackground()
+        field.lastLetterTextView?.text = ""
+        field.lastLetterTextView?.isClickable = true
     }
 
-    fun setFieldBackground() {
+    fun setDefaultFieldBackground() {
         gameField.forEachChild {
             val row = it as TableRow
             row.forEachChild {
@@ -212,8 +221,8 @@ class GameFieldUI : AppCompatActivity() {
 
     fun fieldIsClickable(flag: Boolean) {
         gameField.forEachChild {
-            val row = it as TableRow
-            row.forEachChild {
+            it as TableRow
+            it.forEachChild {
                 it.isClickable = flag
             }
         }
@@ -227,26 +236,19 @@ class GameFieldUI : AppCompatActivity() {
         val allWords = application.assets.open("singular.txt").bufferedReader().use {
             it.readLines()
         }
-        field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true)
+        field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true,this)
         field.usedWords.add(mainWord.toLowerCase())
+        field.tableInit()
         field.start(mainWord)
         field.timeToTurn = timeToTurn.toLong()
         field.database = allWords
-        timer = startTimer(field.timeToTurn*1000).start()
-        fieldRefresh(textViews)
+        timer = startTimer(field.timeToTurn * 1000).start()
         scoreRefresh()
         firstPlayerName.text = firstPlayer
         firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         secondPlayerName.text = secondPlayer
     }
 
-    fun fieldRefresh(textViews: List<List<TextView>>) {
-        textViews.forEachIndexed { i, it ->
-            it.forEachIndexed { k, textView ->
-                textView.text = field.table[i][k].toString()
-            }
-        }
-    }
 
     fun scoreRefresh() {
         firstPlayerScore.text = field.firstPlayer.score.toString()
@@ -273,21 +275,21 @@ class GameFieldUI : AppCompatActivity() {
 
     fun gameFinish(player: Player?) {
         if (player == null) {
-            alert("Drow! Want to play again?") {
-                positiveButton("Yes") {
+            alert("${R.string.draw}\n${R.string.want_to_play_again}") {
+                positiveButton(R.string.yes) {
                     startNewGame()
                 }
-                negativeButton("No") {
+                negativeButton(R.string.no) {
                     System.exit(0)
                 }
             }.show()
         } else {
-            alert("${player.name} win! His score: ${player.score}" +
-                    "\nWant to play againg?") {
-                positiveButton("Yes") {
+            alert("${player.name}${R.string.winner_message}${player.score}" +
+                    "\n${R.string.want_to_play_again}") {
+                positiveButton(R.string.yes) {
                     startNewGame()
                 }
-                negativeButton("No") {
+                negativeButton(R.string.no) {
                     System.exit(0)
                 }
             }.show()
@@ -323,7 +325,7 @@ class GameFieldUI : AppCompatActivity() {
         }.show()
     }
 
-    fun makeFullScreenRefresh() {
+    fun makeFullScreen() {
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

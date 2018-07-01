@@ -1,10 +1,32 @@
 <resources>
     <string name="app_name">BaldaGame</string>
+    <string name="adding_letter_alert">Enter letter</string>
+    <string name="new_letter_wrong_size_message">Enter one letter</string>
+    <string name="negative_button_alert">Cancel</string>
+    <string name="must_use_new_letter_message">You must use entered letter</string>
+    <string name="new_word_added_message">New word added</string>
+    <string name="score">score</string>
+    <string name="your_word">Your word</string>
+    <string name="wrong_word_message">This word was used or don\'t exist</string>
+    <string name="time_is_over">Time is over</string>
+    <string name="draw">Draw!</string>
+    <string name="want_to_play_again">Want to play again?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="winner_message"> win! His score: </string>
 
-    <string name="title_activity_game_table_ui">GameTableUI</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="two_players">2 players</string>
+    <string name="new_game">New game</string>
+    <string name="first_player_name">First player name</string>
+    <string name="second_player_name">Second player name</string>
+    <string name="main_word">Enter main word</string>
+    <string name="random_word">Random word</string>
+    <string name="set_timer">Set timer</string>
+    <string name="time_to_turn">Choose time to turn</string>
+    <string name="wrong_word_length">Error, enter word with length 5</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
 
-    <string name="title_activity_game_table_full">GameTableFull</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

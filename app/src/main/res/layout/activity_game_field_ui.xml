@@ -154,7 +154,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/my_border"
-                    android:text="A"
                     android:textAlignment="center"
                     android:textSize="45sp" />
 
@@ -164,7 +163,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/my_border"
-                    android:text="A"
                     android:textAlignment="center"
                     android:textSize="45sp" />
 
@@ -174,7 +172,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/my_border"
-                    android:text="A"
                     android:textAlignment="center"
                     android:textSize="45sp" />
 
@@ -184,7 +181,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/my_border"
-                    android:text="A"
                     android:textAlignment="center"
                     android:textSize="45sp" />
 
@@ -194,7 +190,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/my_border"
-                    android:text="A"
                     android:textAlignment="center"
                     android:textSize="45sp" />
 
