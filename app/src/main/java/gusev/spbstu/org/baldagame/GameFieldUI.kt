@@ -131,8 +131,7 @@ class GameFieldUI : AppCompatActivity() {
                             if (usedViews.contains(field.lastLetterTextView)) {
                                 afterPlayerTurn(field.newTurn(false))
                             } else {
-                                field.lastLetterTextView?.text = ""
-                                field.lastLetterTextView?.isClickable = true
+                                field.removeLetter()
                                 toast(R.string.must_use_new_letter_message)
                             }
                             field.word = StringBuilder("")
@@ -157,7 +156,7 @@ class GameFieldUI : AppCompatActivity() {
                 firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
                 secondPlayerName.setBackgroundResource(R.drawable.my_border)
             }
-            field.usedWords.add(field.word.toString().toLowerCase())
+            field.addWordToUsedWords(field.word.toString())
             scoreRefresh()
             timer.cancel()
             timer = startTimer(field.timeToTurn * 1000).start()
@@ -206,8 +205,7 @@ class GameFieldUI : AppCompatActivity() {
         scoreRefresh()
         coorsTable.setOnTouchListener(null)
         setDefaultFieldBackground()
-        field.lastLetterTextView?.text = ""
-        field.lastLetterTextView?.isClickable = true
+        field.removeLetter()
     }
 
     fun setDefaultFieldBackground() {
@@ -237,7 +235,7 @@ class GameFieldUI : AppCompatActivity() {
             it.readLines()
         }
         field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true,this)
-        field.usedWords.add(mainWord.toLowerCase())
+        field.addWordToUsedWords(mainWord.toLowerCase())
         field.tableInit()
         field.start(mainWord)
         field.timeToTurn = timeToTurn.toLong()

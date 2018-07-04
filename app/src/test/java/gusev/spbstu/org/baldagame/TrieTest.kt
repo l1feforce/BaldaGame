@@ -8,9 +8,13 @@ class TrieTest {
 
     @Test
     fun contains() {
-        val trie = Trie<String>()
-        trie.add(listOf("b", "a", "l", "d", "a"))
-        assertTrue(trie.contains(listOf("balda")))
+        val trie = Trie<Char>()
+        val words = listOf("тигр", "тапир", "барибал", "барсук")
+        words.forEach {
+            trie.add(it.toList())
+        }
+        assertTrue(trie.contains(listOf('т', 'а', 'п', 'и', 'р')))
+        assertFalse(trie.contains(listOf('т', 'и', 'г')))
         // assertTrue(trie.contains(listOf()))
     }
 }

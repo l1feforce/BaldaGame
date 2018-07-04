@@ -8,8 +8,6 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_game_field_ui.*
 
 
-class Point(val x: Int, val y: Int)
-
 class Player(val name: String, var score: Int) {
     init {
         score = 0
@@ -24,7 +22,7 @@ class Player(val name: String, var score: Int) {
 class GameField(val firstPlayer: Player,
                 val secondPlayer: Player, var turn: Boolean,val context: Context) {
     //var table = mutableListOf("     ", "     ", "     ", "     ", "     ")
-    private lateinit var table: List<List<TextView>>
+    lateinit var table: List<List<TextView>>
     var database = listOf("")
     val usedWords = mutableListOf("")
     var lastLetterTextView: TextView? = null
@@ -32,7 +30,7 @@ class GameField(val firstPlayer: Player,
     var timeToTurn = 0L
 
     fun newTurn(isTimerEnd: Boolean): Boolean {
-        if (!usedWordsChecking(word.toString()) && dbChecking(word.toString()) || isTimerEnd) {
+        if (!usedWordsChecking(word.toString()) && checkWordInDictionary(word.toString()) || isTimerEnd) {
             if (!usedWordsChecking(word.toString())) {
                 if (turn) firstPlayer.addScore(word.length)
                 else secondPlayer.addScore(word.length)
@@ -48,7 +46,16 @@ class GameField(val firstPlayer: Player,
         lastLetterTextView?.text = letter.toUpperCase()
     }
 
-    private fun dbChecking(word: String): Boolean {
+    fun addWordToUsedWords(word: String) {
+        usedWords.add(word.toLowerCase())
+    }
+
+    fun removeLetter(){
+        lastLetterTextView?.text = ""
+        lastLetterTextView?.isClickable = true
+    }
+
+    fun checkWordInDictionary(word: String): Boolean {
         return database.contains(word.toLowerCase())
     }
 
