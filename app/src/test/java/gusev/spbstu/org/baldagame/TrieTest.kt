@@ -1,5 +1,6 @@
 package gusev.spbstu.org.baldagame
 
+import gusev.spbstu.org.baldagame.androidPlayer.Trie
 import org.junit.Test
 
 import org.junit.Assert.*

@@ -26,4 +26,6 @@
     <string name="wrong_word_length">Ошибка, слово должно быть длинной 5</string>
     <string name="settings">Настройки</string>
     <string name="exit">Выход</string>
+    <string name="player1">Игрок1</string>
+    <string name="player2">Игрок2</string>
 </resources>

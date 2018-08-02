@@ -1,11 +1,11 @@
-package gusev.spbstu.org.baldagame
+package gusev.spbstu.org.baldagame.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import gusev.spbstu.org.baldagame.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.util.*
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-class MainActivityUi : AnkoComponent<MainActivity> {
+class MainActivityUi : AnkoComponent<MainActivity>  {
 
     private val customStyleMain = { v: Any ->
         when (v) {
@@ -125,7 +125,7 @@ class MainActivityUi : AnkoComponent<MainActivity> {
 
             button(R.string.exit) {
                 onClick {
-                    System.exit(0);
+                    System.exit(0)
                 }
             }.lparams {
                 width = 640

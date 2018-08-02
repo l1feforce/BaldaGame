@@ -21,7 +21,6 @@ class Player(val name: String, var score: Int) {
 
 class GameField(val firstPlayer: Player,
                 val secondPlayer: Player, var turn: Boolean,val context: Context) {
-    //var table = mutableListOf("     ", "     ", "     ", "     ", "     ")
     lateinit var table: List<List<TextView>>
     var database = listOf("")
     val usedWords = mutableListOf("")

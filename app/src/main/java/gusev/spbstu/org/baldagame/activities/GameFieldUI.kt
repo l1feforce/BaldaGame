@@ -1,4 +1,4 @@
-package gusev.spbstu.org.baldagame
+package gusev.spbstu.org.baldagame.activities
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
+import gusev.spbstu.org.baldagame.*
 import kotlinx.android.synthetic.main.activity_game_field_ui.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -18,6 +19,7 @@ class GameFieldUI : AppCompatActivity() {
 
     lateinit var timer: CountDownTimer
     lateinit var field: GameField
+    var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,15 @@ class GameFieldUI : AppCompatActivity() {
             val minutes = millisRemains[0].toLong() * 60 * 1000
             timer = startTimer(seconds + minutes)
             timer.start()
+        }
+    }
+
+    override fun onBackPressed() {
+        count++
+        if (count == 1) toast("Press back again to exit")
+        else {
+            finish()
+            moveTaskToBack(true)
         }
     }
 
@@ -234,7 +245,7 @@ class GameFieldUI : AppCompatActivity() {
         val allWords = application.assets.open("singular.txt").bufferedReader().use {
             it.readLines()
         }
-        field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true,this)
+        field = GameField(Player(firstPlayer, 0), Player(secondPlayer, 0), true, this)
         field.addWordToUsedWords(mainWord.toLowerCase())
         field.tableInit()
         field.start(mainWord)
@@ -242,9 +253,9 @@ class GameFieldUI : AppCompatActivity() {
         field.database = allWords
         timer = startTimer(field.timeToTurn * 1000).start()
         scoreRefresh()
-        firstPlayerName.text = firstPlayer
+        firstPlayerName.text = field.firstPlayer.name
         firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
-        secondPlayerName.text = secondPlayer
+        secondPlayerName.text = field.secondPlayer.name
     }
 
 

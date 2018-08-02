@@ -1,6 +1,6 @@
-package gusev.spbstu.org.baldagame
+package gusev.spbstu.org.baldagame.androidPlayer
 
-class Trie<T>(val root: Node<T> =  Node<T>(null, false)) {
+class Trie<T>(val root: Node<T> = Node<T>(null, false)) {
 
     fun add(values: List<T>) {
         var children = root.children

@@ -1,10 +1,7 @@
-package gusev.spbstu.org.baldagame
+package gusev.spbstu.org.baldagame.androidPlayer
 
-import android.app.Activity
-import android.widget.TableRow
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_game_field_ui.*
-import org.jetbrains.anko.forEachChild
+import gusev.spbstu.org.baldagame.GameField
 
 class AndroidPlayer(val field: GameField) {
     val allLetters = listOf("а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п",

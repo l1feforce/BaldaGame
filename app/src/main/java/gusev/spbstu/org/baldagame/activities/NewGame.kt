@@ -1,4 +1,4 @@
-package gusev.spbstu.org.baldagame
+package gusev.spbstu.org.baldagame.activities
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import gusev.spbstu.org.baldagame.R
 
 
 // TODO: Rename parameter arguments, choose names that match
