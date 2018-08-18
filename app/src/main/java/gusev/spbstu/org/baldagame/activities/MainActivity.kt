@@ -47,14 +47,6 @@ class MainActivityUi : AnkoComponent<MainActivity>  {
 
     override fun createView(ui: AnkoContext<MainActivity>): View = with(ui) {
         verticalLayout {
-            button("Just start") {
-                onClick {
-                    startActivity<GameFieldUI>("mainWord" to "балда",
-                            "firstPlayerName" to "Игрок1",
-                            "secondPlayerName" to "Игрок2",
-                            "timeToTurn" to "10")
-                }
-            }
             button(R.string.two_players) {
                 onClick {
                     alert(R.string.new_game) {

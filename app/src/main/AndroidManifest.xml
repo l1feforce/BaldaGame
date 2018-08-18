@@ -10,18 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".activities.GameFieldUI"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Fullscreen">
+            android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".activities.MainMenu" />
+        <activity android:name=".activities.MainMenu"
+            android:theme="@style/AppTheme" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
     </application>
 
 </manifest>

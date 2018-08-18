@@ -8,20 +8,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class MainMenu : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id., NewGame.newInstance(), "newGame")
-                    .commit()
-        }
+        startNewGame()
     }
 
     fun startNewGame() {
-        newGame.onClick {
-
+        newGame.setOnClickListener {
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.layoutForNewGame, NewGame(), "newGame")
+                    .commit()
         }
     }
 
