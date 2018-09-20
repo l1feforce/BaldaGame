@@ -3,4 +3,4 @@ This is a project of russian game with words called "Balda" made on android on t
 How to play?
 You need to select an empty cell and set a new letter for it, then you need to select a new word using the new letter using swipe. You will play while game field has empty cells. Will win player which has more points on the finish of game, one point it's one letter.
 When you start new game, you can choose main word and set time to one turn.
-Video with example: https://youtu.be/4rSUbzC6fCs
+
