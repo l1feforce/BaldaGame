@@ -9,20 +9,27 @@
         android:roundIcon="@mipmap/ic_baldagame_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".activities.GameFieldUI"
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".activities.GameFieldUI"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".mvp.views.MainMenu"
             android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".activities.MainMenu"
-            android:theme="@style/AppTheme" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+        <activity
+            android:name=".mvp.views.GameField"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_game_field"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

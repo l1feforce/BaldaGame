@@ -26,7 +26,7 @@ class Trie<T>(val root: Node<T> = Node<T>(null, false)) {
         return search(values) != null
     }
 
-    private fun search(values: List<T>) : Node<T>? {
+    fun search(values: List<T>) : Node<T>? {
         var children = root.children
         if (children.isEmpty()) { return null }
 
@@ -47,6 +47,6 @@ class Trie<T>(val root: Node<T> = Node<T>(null, false)) {
                 children = node.children
             }
         }
-        throw IllegalStateException("Should not get here")
+        throw IllegalStateException("Should not get here") as Throwable
     }
 }

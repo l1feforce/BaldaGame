@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.TextView
 
-import kotlinx.android.synthetic.main.activity_game_field_ui.*
+import kotlinx.android.synthetic.main.game_field.*
 
 
 class Player(val name: String, var score: Int) {

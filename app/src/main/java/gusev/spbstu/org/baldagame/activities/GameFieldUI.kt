@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
 import gusev.spbstu.org.baldagame.*
-import kotlinx.android.synthetic.main.activity_game_field_ui.*
+import kotlinx.android.synthetic.main.game_field.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.io.FileOutputStream
@@ -23,13 +23,8 @@ class GameFieldUI : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game_field_ui)
-        val textViews = listOf(listOf(cell00, cell01, cell02, cell03, cell04),
-                listOf(cell10, cell11, cell12, cell13, cell14),
-                listOf(cell20, cell21, cell22, cell23, cell24),
-                listOf(cell30, cell31, cell32, cell33, cell34),
-                listOf(cell40, cell41, cell42, cell43, cell44))
-        gamePreparing(textViews)
+        setContentView(R.layout.game_field)
+        gamePreparing()
         makeFullScreen()
         addingNewLetter()
     }
@@ -83,40 +78,34 @@ class GameFieldUI : AppCompatActivity() {
     fun addingNewLetter() {
         makeFullScreen()
         gameField.forEachChild {
-            it as TableRow
-            it.forEachChild {
+            it.setOnClickListener { _ ->
                 it as TextView
-                if (it.text.isBlank()) {
-                    it.setOnClickListener {
-                        it as TextView
-                        field.lastLetterTextView = it
-                        alert(R.string.adding_letter_alert) {
-                            customView {
-                                linearLayout {
-                                    val editTextForLetter = editText() {}.lparams {
-                                        padding = dip(16)
-                                        weight = 1f
-                                        width = matchParent
-                                    }
-                                    padding = dip(16)
-                                    positiveButton("OK") {
-                                        if (editTextForLetter.text.length == 1) {
-                                            field.addNewLetter(editTextForLetter.text.toString())
-                                            fieldIsClickable(false)
-                                            swipeTracking()
-                                        } else toast(R.string.new_letter_wrong_size_message)
-                                        makeFullScreen()
-                                    }
-                                    negativeButton(R.string.negative_button_alert) {
-                                        setDefaultFieldBackground()
-                                        makeFullScreen()
-                                    }
-                                }
+                field.lastLetterTextView = it
+                alert(R.string.adding_letter_alert) {
+                    customView {
+                        linearLayout {
+                            val enteredLetter = editText() {}.lparams {
+                                padding = dip(16)
+                                weight = 1f
+                                width = matchParent
                             }
-                        }.show()
-                        it.setBackgroundColor(Color.parseColor("#DF0101"))
+                            padding = dip(16)
+                            positiveButton("OK") {
+                                if (enteredLetter.text.length == 1) {
+                                    field.addNewLetter(enteredLetter.text.toString())
+                                    fieldIsClickable(false)
+                                    swipeTracking()
+                                } else toast(R.string.new_letter_wrong_size_message)
+                                makeFullScreen()
+                            }
+                            negativeButton(R.string.negative_button_alert) {
+                                setDefaultFieldBackground()
+                                makeFullScreen()
+                            }
+                        }
                     }
-                }
+                }.show()
+               // it.setBackgroundColor(Color.parseColor("#DF0101"))
             }
         }
     }
@@ -124,35 +113,32 @@ class GameFieldUI : AppCompatActivity() {
 
     fun swipeTracking() {
         val usedViews = mutableListOf<TextView>()
-        coorsTable.setOnTouchListener { view, event ->
-            gameField.forEachChild {
-                val row = it as TableRow
-                row.forEachChild {
-                    val viewCoordinates = IntArray(2)
-                    it.getLocationOnScreen(viewCoordinates)
-                    if (event.x.toInt() > viewCoordinates[0] && event.x.toInt() < viewCoordinates[0] + it.width &&
-                            event.y.toInt() > viewCoordinates[1] && event.y.toInt() < viewCoordinates[1] + it.height) {
-                        it as TextView
-                        if (!usedViews.contains(it)) field.word.append(it.text)
-                        usedViews.add(it)
-                        it.setBackgroundColor(Color.parseColor("#DF0101"))
-                        if (event.action == MotionEvent.ACTION_UP) {
-                            coorsTable.setOnTouchListener(null)
-                            setDefaultFieldBackground()
-                            if (usedViews.contains(field.lastLetterTextView)) {
-                                afterPlayerTurn(field.newTurn(false))
-                            } else {
-                                field.removeLetter()
-                                toast(R.string.must_use_new_letter_message)
-                            }
-                            field.word = StringBuilder("")
-                            usedViews.removeAll(usedViews)
-                            addingNewLetter()
+        gameField.forEachChild {
+            it.setOnTouchListener { view, event ->
+                val viewCoordinates = IntArray(2)
+                it.getLocationOnScreen(viewCoordinates)
+                if (event.x.toInt() > viewCoordinates[0] && event.x.toInt() < viewCoordinates[0] + it.width &&
+                        event.y.toInt() > viewCoordinates[1] && event.y.toInt() < viewCoordinates[1] + it.height) {
+                    it as TextView
+                    if (!usedViews.contains(it)) field.word.append(it.text)
+                    usedViews.add(it)
+                    it.setBackgroundColor(Color.parseColor("#DF0101"))
+                    if (event.action == MotionEvent.ACTION_UP) {
+                        gameField.setOnTouchListener(null)
+                        setDefaultFieldBackground()
+                        if (usedViews.contains(field.lastLetterTextView)) {
+                            afterPlayerTurn(field.newTurn(false))
+                        } else {
+                            field.removeLetter()
+                            toast(R.string.must_use_new_letter_message)
                         }
+                        field.word = StringBuilder("")
+                        usedViews.removeAll(usedViews)
+                        addingNewLetter()
                     }
                 }
+                true
             }
-            true
         }
     }
 
@@ -161,11 +147,11 @@ class GameFieldUI : AppCompatActivity() {
             longToast("${resources.getString(R.string.new_word_added_message)}: ${field.word}")
             addingNewWordToScore(false)
             if (!field.turn) {
-                firstPlayerName.setBackgroundResource(R.drawable.my_border)
-                secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+                //firstPlayerName.setBackgroundResource(R.drawable.my_border)
+                //secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
             } else {
-                firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
-                secondPlayerName.setBackgroundResource(R.drawable.my_border)
+                //firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+                //secondPlayerName.setBackgroundResource(R.drawable.my_border)
             }
             field.addWordToUsedWords(field.word.toString())
             scoreRefresh()
@@ -175,15 +161,14 @@ class GameFieldUI : AppCompatActivity() {
         } else {
             field.lastLetterTextView?.text = ""
             //toast(resources.getString(R.string.wrong_word_message)+": ${field.word}")
-            coorsTable.snack(resources.getString(R.string.wrong_word_message)+": ${field.word}") {
+            coorsTable.snack(resources.getString(R.string.wrong_word_message) + ": ${field.word}") {
                 action("Add word") {
                     try {
                         val outputStream: FileOutputStream = openFileOutput("assets/singular.txt", 0)
                         val writer = OutputStreamWriter(outputStream)
                         writer.write("\nбаа")
                         writer.close()
-                    }
-                    catch (e: Exception) {
+                    } catch (e: Exception) {
                         toast("${e.javaClass}")
                     }
                 }
@@ -192,14 +177,15 @@ class GameFieldUI : AppCompatActivity() {
         field.lastLetterTextView = null
     }
 
-    fun addingNewWordToScore(isTimerEnd: Boolean){
+    fun addingNewWordToScore(isTimerEnd: Boolean) {
         val newTextView = TextView(this)
         newTextView.leftPadding = dip(10)
         newTextView.topPadding = dip(2)
         newTextView.text = if (!isTimerEnd) field.word.toString() + "    ${field.word.length}"
         else "-"
-        if (!field.turn && !isTimerEnd) firstPlayerWords.addView(newTextView)
+        /*if (!field.turn && !isTimerEnd) firstPlayerWords.addView(newTextView)
         else secondPlayerWords.addView(newTextView)
+        */
     }
 
     fun timeIsOver() {
@@ -207,11 +193,11 @@ class GameFieldUI : AppCompatActivity() {
         addingNewWordToScore(true)
         field.newTurn(true)
         if (!field.turn) {
-            firstPlayerName.setBackgroundResource(R.drawable.my_border)
-            secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+            //firstPlayerName.setBackgroundResource(R.drawable.my_border)
+            //secondPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         } else {
-            firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
-            secondPlayerName.setBackgroundResource(R.drawable.my_border)
+            //firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+           // secondPlayerName.setBackgroundResource(R.drawable.my_border)
         }
         scoreRefresh()
         coorsTable.setOnTouchListener(null)
@@ -220,27 +206,19 @@ class GameFieldUI : AppCompatActivity() {
     }
 
     fun setDefaultFieldBackground() {
-        gameField.forEachChild {
-            val row = it as TableRow
-            row.forEachChild {
-                it.setBackgroundResource(R.drawable.my_border)
-            }
-        }
+
     }
 
     fun fieldIsClickable(flag: Boolean) {
         gameField.forEachChild {
-            it as TableRow
-            it.forEachChild {
-                it.isClickable = flag
-            }
+            it.isClickable = flag
         }
     }
 
-    fun gamePreparing(textViews: List<List<TextView>>) {
+    fun gamePreparing() {
         val firstPlayer = intent.getStringExtra("firstPlayerName") ?: ""
         val secondPlayer = intent.getStringExtra("secondPlayerName") ?: ""
-        val mainWord: String = intent.getStringExtra("mainWord") ?: ""
+        val mainWord: String = intent.getStringExtra("mainWord") ?: "балда"
         val timeToTurn = intent.getStringExtra("timeToTurn") ?: ""
         val allWords = application.assets.open("singular.txt").bufferedReader().use {
             it.readLines()
@@ -254,24 +232,21 @@ class GameFieldUI : AppCompatActivity() {
         timer = startTimer(field.timeToTurn * 1000).start()
         scoreRefresh()
         firstPlayerName.text = field.firstPlayer.name
-        firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
+        //firstPlayerName.setBackgroundColor(Color.parseColor("#DF0101"))
         secondPlayerName.text = field.secondPlayer.name
     }
 
 
     fun scoreRefresh() {
-        firstPlayerScore.text = field.firstPlayer.score.toString()
-        secondPlayerScore.text = field.secondPlayer.score.toString()
+        scoreFirstPlayer.text = field.firstPlayer.score.toString()
+        scoreSecondPlayer.text = field.secondPlayer.score.toString()
     }
 
     fun winnerChecking() {
         var isFieldFull = true
         gameField.forEachChild {
-            it as TableRow
-            it.forEachChild {
-                it as TextView
-                if (it.text.isBlank()) isFieldFull = false
-            }
+            it as TextView
+            if (it.text.isBlank()) isFieldFull = false
         }
         if (isFieldFull) {
             when {

@@ -16,6 +16,5 @@ class TrieTest {
         }
         assertTrue(trie.contains(listOf('т', 'а', 'п', 'и', 'р')))
         assertFalse(trie.contains(listOf('т', 'и', 'г')))
-        // assertTrue(trie.contains(listOf()))
     }
 }
