@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.MotionEvent
 import android.view.View
-import android.widget.TableRow
 import android.widget.TextView
 import gusev.spbstu.org.baldagame.*
+import gusev.spbstu.org.baldagame.GameField
+import gusev.spbstu.org.baldagame.Player
 import kotlinx.android.synthetic.main.game_field.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick

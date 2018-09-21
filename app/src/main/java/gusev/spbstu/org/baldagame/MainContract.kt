@@ -22,7 +22,7 @@ interface MainContract {
     interface Presenter {
 
         fun setTimerIsClicked()
-1
+
         fun randomWordIsClicked()
 
         fun newGameIsClicked(supportFragmentManager: android.support.v4.app.FragmentManager)

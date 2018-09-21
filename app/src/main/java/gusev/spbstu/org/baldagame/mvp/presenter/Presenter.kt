@@ -14,6 +14,7 @@ import gusev.spbstu.org.baldagame.mvp.views.NewGame
 import kotlinx.android.synthetic.main.fragment_new_game.*
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.selector
+import java.util.*
 
 class Presenter(): MainContract.Presenter {
     lateinit var view: Activity
@@ -27,7 +28,8 @@ class Presenter(): MainContract.Presenter {
     }
 
     override fun newGameIsClicked(supportFragmentManager: android.support.v4.app.FragmentManager) {
-        NewGame().show(supportFragmentManager, "newGame")
+        val newGameFragment = NewGame()
+        newGameFragment.show(supportFragmentManager, "newGame")
     }
 
     override fun settingsIsClicked() {
@@ -54,6 +56,14 @@ class Presenter(): MainContract.Presenter {
     }
 
     override fun randomWordIsClicked() {
+        val input = this.javaClass.getClassLoader().getResourceAsStream("assets/singular.txt")
+        val allWords = input.bufferedReader().use {
+            it.readLines()
+        }
+        val filteredWords = allWords.filter { it.length == 5 }
+        val random = Random().nextInt(filteredWords.size)
+        val randomWord = filteredWords[random]
+        view.mainWord.setText(randomWord)
 
     }
 

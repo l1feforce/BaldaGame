@@ -56,7 +56,7 @@ class NewGame : DialogFragment() {
         super.onCreateDialog(savedInstanceState)
         presenter = Presenter(this)
         val dialog = AlertDialog.Builder(activity)
-                .setView(layoutInflater.inflate(R.layout.fragment_new_game, null))
+                .setView(R.layout.fragment_new_game)
                 .setTitle(R.string.new_game)
                 .setPositiveButton("OK") { _, _ -> presenter.startNewGame() }
         return dialog.create()
@@ -65,12 +65,11 @@ class NewGame : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTimer.setOnClickListener {
-
+            presenter.setTimerIsClicked()
         }
 
         randomWord.setOnClickListener {
-            val randomWord = randomWord()
-            mainWord.setText(randomWord)
+
         }
 
 

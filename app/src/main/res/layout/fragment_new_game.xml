@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="@string/player1"
                 android:inputType="textPersonName"
                 android:text="@string/player1" />
 
@@ -39,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="@string/player2"
                 android:inputType="textPersonName"
                 android:text="@string/player2" />
         </LinearLayout>
@@ -48,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/main_word"
             android:inputType="textPersonName"
             android:text="балда" />
 
@@ -74,4 +77,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </FrameLayout>

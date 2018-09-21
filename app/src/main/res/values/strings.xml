@@ -23,17 +23,12 @@
     <string name="main_word">Enter main word</string>
     <string name="random_word">Random word</string>
     <string name="set_timer">Set timer</string>
-    <string name="time_to_turn">Choose time to turn</string>
+    <string name="time_to_turn" translatable="false">Choose time to turn</string>
     <string name="wrong_word_length">Error, enter word with length 5</string>
     <string name="settings">Settings</string>
     <string name="exit">Exit</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="title_activity_game_field">GameField</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
