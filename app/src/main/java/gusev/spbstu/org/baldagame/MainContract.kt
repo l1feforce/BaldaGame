@@ -1,6 +1,7 @@
 package gusev.spbstu.org.baldagame
 
-import android.app.FragmentManager
+import android.widget.TextView
+import org.w3c.dom.Text
 
 interface MainContract {
     interface View {
@@ -35,7 +36,7 @@ interface MainContract {
 
         fun onDestroy()
 
-        fun addNewLetter()
+        fun addNewLetter(cell: TextView)
 
         fun addNewWord()
 
