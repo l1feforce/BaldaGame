@@ -1,9 +1,7 @@
 package gusev.spbstu.org.baldagame.androidPlayer
 
-import android.widget.TextView
-import gusev.spbstu.org.baldagame.GameField
-
-class AndroidPlayer(val field: GameField) {
+/*
+class AndroidPlayer() {
     val allLetters = listOf("а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п",
             "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я")
     val foundWords = Trie<Char>()
@@ -52,3 +50,4 @@ class AndroidPlayer(val field: GameField) {
     fun getRightWords(list: List<String>): List<String> = list.filter { field.checkWordInDictionary(it) }
 
 }
+        */

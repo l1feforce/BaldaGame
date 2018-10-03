@@ -6,7 +6,7 @@
     android:layout_gravity="center_vertical"
     android:layout_marginEnd="40dp"
     android:layout_marginStart="40dp"
-    tools:context=".mvp.views.NewGame">
+    tools:context=".ui.NewGameFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

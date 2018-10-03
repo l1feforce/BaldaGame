@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coorsTable"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
@@ -314,22 +314,22 @@
 
     <TextView
         android:id="@+id/timeRemains"
-        android:layout_width="63dp"
+        android:layout_width="62dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/text_view_background"
         android:gravity="center"
-        android:text="02:00"
+        android:text="123"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/secondPlayerName"
-        app:layout_constraintStart_toEndOf="@+id/firstPlayer"
+        app:layout_constraintStart_toEndOf="@+id/firstPlayerName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/done_button"
+        android:id="@+id/doneButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="32dp"
@@ -340,7 +340,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/cancel_button"
+        android:id="@+id/cancelButton"
         android:layout_width="59dp"
         android:layout_height="60dp"
         android:layout_marginBottom="32dp"
@@ -360,7 +360,7 @@
         android:textColor="#FFFFFF"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/done_button"
+        app:layout_constraintEnd_toEndOf="@+id/doneButton"
         app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent" />
 

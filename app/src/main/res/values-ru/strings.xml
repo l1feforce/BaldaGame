@@ -14,7 +14,7 @@
     <string name="want_to_play_again">Хотите сыграть еще?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
-    <string name="winner_message">" победил! Счет: "</string>
+    <string name="winner_message">" победил!"</string>
     <string name="two_players">2 игрока</string>
     <string name="new_game">Новая игра</string>
     <string name="first_player_name">Имя первого игрока</string>
@@ -28,4 +28,7 @@
     <string name="exit">Выход</string>
     <string name="player1">Игрок1</string>
     <string name="player2">Игрок2</string>
+    <string name="without_timer">Без таймера</string>
+    <string name="press_back_again">Нажмите еще раз чтобы выйти</string>
+    <string name="online_game">Online game</string>
 </resources>
