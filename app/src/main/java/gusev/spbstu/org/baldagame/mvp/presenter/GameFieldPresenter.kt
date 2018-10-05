@@ -3,6 +3,7 @@ package gusev.spbstu.org.baldagame.mvp.presenter
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToUsedWords
+import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.field
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.isThisWordOkay
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.word
 import gusev.spbstu.org.baldagame.mvp.model.Player
@@ -45,6 +46,10 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
             changeTurnWhenTimeIsEnd()
         }
 
+    }
+
+    fun isThisCellsNeighbors(firstCell: String, secondCell: String): Boolean {
+        return field.bfs(firstCell, secondCell) == 1
     }
 
 }

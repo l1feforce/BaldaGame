@@ -26,6 +26,8 @@ import org.jetbrains.anko.forEachChild
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.lang.Math.pow
+import java.lang.Math.sqrt
 
 class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
@@ -36,6 +38,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     var timer: CountDownTimer? = null
     var selectedCell: TextView? = null
     private var count = 0
+    var listOfCellsCoords = mutableMapOf<TextView, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 intent.getStringExtra("secondPlayerName") ?: "",
                 intent.getStringExtra("mainWord") ?: "балда",
                 intent.getStringExtra("timeToTurn") ?: "")
+
 
 
         addNewLetter()
@@ -66,55 +70,68 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 it.setOnClickListener { _ ->
                     selectedCell = it
                     presenter.addNewLetter()
-                    makeFullScreen()
                 }
             } else it.setOnClickListener(null)
         }
     }
 
+    private fun findNearestCell(event: MotionEvent): TextView {
+        var min: Pair<TextView, Int> = cell00 to 1000
+        gameField.forEachChild {
+            val viewCoordinates = IntArray(2)
+            it.getLocationOnScreen(viewCoordinates)
+            listOfCellsCoords[it as TextView] = "${viewCoordinates[0]}:${viewCoordinates[1]}"
+        }
+        listOfCellsCoords.forEach { textView, s ->
+            val distance = sqrt(pow((event.x.toInt() - s.split(":")[0].toInt()).toDouble(), 2.0) +
+                    pow((event.y.toInt() - s.split(":")[1].toInt()).toDouble(), 2.0))
+            if (distance < min.second) min = textView to distance.toInt()
+        }
+        return min.first
+    }
+
     override fun addNewWord() {
-        val usedViews = mutableListOf<TextView>()
+        val usedViews = mutableSetOf<TextView>()
+        var lastUsedCell: TextView? = null
+
         mainLayout.setOnTouchListener { _, event ->
-            gameField.forEachChild { cell ->
-                val viewCoordinates = IntArray(2)
-                cell.getLocationOnScreen(viewCoordinates)
+            val cell = findNearestCell(event)
 
-                val swipeOverCell = event.x.toInt() > viewCoordinates[0] + 10 && event.x.toInt() < viewCoordinates[0] + cell.width - 10 &&
-                        event.y.toInt() > viewCoordinates[1] + 10 && event.y.toInt() < viewCoordinates[1] + cell.height - 10
+            var isThoseCellsIsNeighbors = presenter.isThisCellsNeighbors(resources.getResourceEntryName(cell.id), resources.getResourceEntryName(lastUsedCell?.id
+              ?: cell.id))
+            if (lastUsedCell == null) isThoseCellsIsNeighbors = true
 
-                if (swipeOverCell) {
-                    cell as TextView
-                    cell.setTextColor(Color.parseColor("#D4145A"))
-                    if (!usedViews.contains(cell)) {
-                        enteredWord.text = "${enteredWord.text}${cell.text}"
-                    }
-                    usedViews.add(cell)
-                    val fingerUp = event.action == MotionEvent.ACTION_UP
-
-                    if (fingerUp) {
-                        mainLayout.setOnTouchListener(null)
-                        doneButton.setOnClickListener {
-                            if (usedViews.contains(selectedCell)) {
-                                word = enteredWord.text.toString()
-                                presenter.turnIsMade()
-                                selectedCell = null
-                            } else {
-                                cancelTurn()
-                                toast(R.string.must_use_new_letter_message)
-                            }
-                            setDefaultTextColor()
-                            usedViews.removeAll(usedViews)
-                            addNewLetter()
-                        }
-
-                        cancelButton.setOnClickListener {
-                            cancelTurn()
-                            setDefaultTextColor()
-                            usedViews.removeAll(usedViews)
-                            addNewLetter()
-                        }
-                    }
+            if (isThoseCellsIsNeighbors && cell.text.isNotBlank()) {
+                cell.setTextColor(Color.parseColor("#D4145A"))
+                if (!usedViews.contains(cell)) {
+                    enteredWord.text = "${enteredWord.text}${cell.text}"
+                    lastUsedCell = cell
                 }
+                usedViews.add(cell)
+            }
+
+            doneButton.setOnClickListener {
+                if (usedViews.contains(selectedCell)) {
+                    word = enteredWord.text.toString()
+                    presenter.turnIsMade()
+                    selectedCell = null
+                    lastUsedCell = null
+                } else {
+                    cancelTurn()
+                    toast(R.string.must_use_new_letter_message)
+                }
+                setDefaultTextColor()
+                usedViews.removeAll(usedViews)
+                listOfCellsCoords.clear()
+                addNewLetter()
+            }
+
+            cancelButton.setOnClickListener {
+                cancelTurn()
+                setDefaultTextColor()
+                usedViews.removeAll(usedViews)
+                listOfCellsCoords.clear()
+                addNewLetter()
             }
             true
         }
@@ -147,7 +164,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                     val newGameFragment = NewGameFragment()
                     newGameFragment.show(supportFragmentManager, "newGame")
                 }
-                .setNegativeButton(R.string.no) { _, _ -> startActivity<MainMenuActivity>()}
+                .setNegativeButton(R.string.no) { _, _ -> startActivity<MainMenuActivity>() }
                 .setMessage(R.string.want_to_play_again)
                 .setCancelable(false)
         dialog.create().show()
