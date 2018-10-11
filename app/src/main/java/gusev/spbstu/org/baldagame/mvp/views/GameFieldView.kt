@@ -31,4 +31,6 @@ interface GameFieldView : MvpView {
     fun changeTurnWhenTimeIsEnd()
     fun winningDialog(player: Player?)
     fun winnerChecking()
+    fun setLettersForFieldModel()
+    fun setLetter(letterNumber: Int, letter: String?)
 }

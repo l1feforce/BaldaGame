@@ -54,6 +54,13 @@
             android:inputType="textPersonName"
             android:text="балда" />
 
+        <com.github.okdroid.checkablechipview.CheckableChipView
+            android:id="@+id/botGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_with_bot"
+            android:color="#ff8533"	/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

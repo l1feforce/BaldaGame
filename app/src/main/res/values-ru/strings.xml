@@ -30,5 +30,6 @@
     <string name="player2">Игрок2</string>
     <string name="without_timer">Без таймера</string>
     <string name="press_back_again">Нажмите еще раз чтобы выйти</string>
-    <string name="online_game">Online game</string>
+    <string name="online_game">Онлайн игра</string>
+    <string name="game_with_bot">Игра с ботом</string>
 </resources>

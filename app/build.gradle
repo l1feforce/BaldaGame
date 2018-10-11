@@ -14,7 +14,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "gusev.spbstu.org.baldagame"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -27,6 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -53,6 +54,8 @@ dependencies {
     implementation 'com.arello-mobile:moxy:1.5.5'
     implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.github.okdroid:checkablechipview:1.0.2'
+
 }
 kotlin {
     experimental {

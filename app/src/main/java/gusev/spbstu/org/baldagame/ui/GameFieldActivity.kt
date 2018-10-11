@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import androidx.core.view.get
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import gusev.spbstu.org.baldagame.R
@@ -14,6 +15,7 @@ import gusev.spbstu.org.baldagame.action
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToDictionary
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToUsedWords
+import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.field
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.usedWords
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.word
 import gusev.spbstu.org.baldagame.mvp.model.Player
@@ -28,6 +30,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.lang.Math.pow
 import java.lang.Math.sqrt
+import kotlin.collections.set
 
 class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
@@ -38,7 +41,8 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     var timer: CountDownTimer? = null
     var selectedCell: TextView? = null
     private var count = 0
-    var listOfCellsCoords = mutableMapOf<TextView, String>()
+    var listOfCellsCoors = mutableMapOf<TextView, String>()
+    var botGame = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +53,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 intent.getStringExtra("mainWord") ?: "балда",
                 intent.getStringExtra("timeToTurn") ?: "")
 
-
-
+        botGame = intent.extras.getBoolean("botGame")
         addNewLetter()
     }
 
@@ -64,14 +67,18 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     override fun addNewLetter() {
-        gameField.forEachChild {
-            it as TextView
-            if (it.text.toString().isBlank()) {
-                it.setOnClickListener { _ ->
-                    selectedCell = it
-                    presenter.addNewLetter()
-                }
-            } else it.setOnClickListener(null)
+        if (botGame && !GameFieldModel.itWasFirstPlayerTurn) {
+            presenter.makeBotTurn()
+        } else {
+            gameField.forEachChild {
+                it as TextView
+                if (it.text.toString().isBlank()) {
+                    it.setOnClickListener { _ ->
+                        selectedCell = it
+                        presenter.addNewLetter()
+                    }
+                } else it.setOnClickListener(null)
+            }
         }
     }
 
@@ -80,9 +87,9 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
         gameField.forEachChild {
             val viewCoordinates = IntArray(2)
             it.getLocationOnScreen(viewCoordinates)
-            listOfCellsCoords[it as TextView] = "${viewCoordinates[0]}:${viewCoordinates[1]}"
+            listOfCellsCoors[it as TextView] = "${viewCoordinates[0]}:${viewCoordinates[1]}"
         }
-        listOfCellsCoords.forEach { textView, s ->
+        listOfCellsCoors.forEach { textView, s ->
             val distance = sqrt(pow((event.x.toInt() - s.split(":")[0].toInt()).toDouble(), 2.0) +
                     pow((event.y.toInt() - s.split(":")[1].toInt()).toDouble(), 2.0))
             if (distance < min.second) min = textView to distance.toInt()
@@ -94,11 +101,12 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
         val usedViews = mutableSetOf<TextView>()
         var lastUsedCell: TextView? = null
 
+
         mainLayout.setOnTouchListener { _, event ->
             val cell = findNearestCell(event)
 
             var isThoseCellsIsNeighbors = presenter.isThisCellsNeighbors(resources.getResourceEntryName(cell.id), resources.getResourceEntryName(lastUsedCell?.id
-              ?: cell.id))
+                    ?: cell.id))
             if (lastUsedCell == null) isThoseCellsIsNeighbors = true
 
             if (isThoseCellsIsNeighbors && cell.text.isNotBlank()) {
@@ -122,7 +130,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 }
                 setDefaultTextColor()
                 usedViews.removeAll(usedViews)
-                listOfCellsCoords.clear()
+                listOfCellsCoors.clear()
                 addNewLetter()
             }
 
@@ -130,11 +138,12 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 cancelTurn()
                 setDefaultTextColor()
                 usedViews.removeAll(usedViews)
-                listOfCellsCoords.clear()
+                listOfCellsCoors.clear()
                 addNewLetter()
             }
             true
         }
+
     }
 
     override fun winnerChecking() {
@@ -189,6 +198,19 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
         } else {
             startTimer(timeToTurn.toLong() * 1000)
         }
+
+    }
+
+    override fun setLettersForFieldModel() {
+        gameField.forEachChild {
+            val cellName = resources.getResourceEntryName(it.id)
+            field[cellName].letter = (it as TextView).text.toString().toLowerCase()
+        }
+    }
+
+    override fun setLetter(letterNumber: Int, letter: String?) {
+        val cell = gameField[letterNumber]
+        (cell as TextView).text = letter?.toUpperCase()
     }
 
     override fun onPause() {

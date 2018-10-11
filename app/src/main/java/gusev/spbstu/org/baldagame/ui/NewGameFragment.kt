@@ -47,6 +47,9 @@ class NewGameFragment : MvpAppCompatDialogFragment(), NewGameView {
 
         setTimer.setOnClickListener { presenter.setTimerIsClicked() }
         randomWord.setOnClickListener { presenter.randomWordIsClicked() }
+        botGame.onCheckedChangeListener = { _, isChecked ->
+            secondPlayer.isEnabled = !isChecked
+        }
     }
 
     override fun showSelector() {
@@ -68,7 +71,8 @@ class NewGameFragment : MvpAppCompatDialogFragment(), NewGameView {
         startActivity<GameFieldActivity>("mainWord" to mainWord.text.toString(),
                 "firstPlayerName" to firstPlayer.text.toString(),
                 "secondPlayerName" to secondPlayer.text.toString(),
-                "timeToTurn" to timeToTurn)
+                "timeToTurn" to timeToTurn,
+                "botGame" to botGame.isChecked)
     }
 
     override fun showToast() {

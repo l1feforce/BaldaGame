@@ -2,7 +2,7 @@ package gusev.spbstu.org.baldagame.androidPlayer
 
 /*
 class AndroidPlayer() {
-    val allLetters = listOf("а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п",
+    val listOfLetters = listOf("а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п",
             "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я")
     val foundWords = Trie<Char>()
     val sortedList = field.database.sorted()
@@ -12,7 +12,7 @@ class AndroidPlayer() {
         field.table.forEachIndexed { y, list ->
             list.forEachIndexed { x, textView ->
                 if (isThisOkayPlaceForNewLetter(x, y)) {
-                    allLetters.forEach {
+                    listOfLetters.forEach {
                         textView.text = it
                         getRightWords(searchOfWords(textView)).forEach {
                             if (!foundWords.contains(it.toList())) foundWords.add(it.toList())

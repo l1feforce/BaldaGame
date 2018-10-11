@@ -1,18 +1,25 @@
 package gusev.spbstu.org.baldagame.mvp.model
 
+
+import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.dictionary
+import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.invDictionary
 import java.util.*
 
 class Graph {
-    private data class Vertex(val name: String) {
+    data class Vertex(val name: String, var letter: String) {
         val neighbors = mutableSetOf<Vertex>()
     }
 
-    private val vertices = mutableMapOf<String, Vertex>()
+    data class FoundWord(val word: String) {
+        var visitedVertex = mutableSetOf<Vertex>()
+    }
 
-    private operator fun get(name: String) = vertices[name] ?: throw IllegalArgumentException()
+    val vertices = mutableMapOf<String, Vertex>()
 
-    fun addVertex(name: String) {
-        vertices[name] = Vertex(name)
+    operator fun get(name: String) = vertices[name] ?: throw IllegalArgumentException()
+
+    fun addVertex(name: String, letter: String) {
+        vertices[name] = Vertex(name, letter)
     }
 
     private fun connect(first: Vertex, second: Vertex) {
@@ -22,7 +29,8 @@ class Graph {
 
     fun connect(first: String, second: String) = connect(this[first], this[second])
 
-    fun neighbors(name: String) = vertices[name]?.neighbors?.map { it.name } ?: listOf()
+    fun neighbors(name: String) = vertices[name]?.neighbors?.map { it.name to it.letter }
+            ?: listOf()
 
     fun bfs(start: String, finish: String) = bfs(this[start], this[finish])
 
@@ -43,17 +51,64 @@ class Graph {
         return -1
     }
 
-    fun dfs(start: String, finish: String): Int = dfs(this[start], this[finish], setOf()) ?: -1
+    fun wordsSearch(start: String): Set<String> {
+        val setOfWords = mutableSetOf<String>()
+        val foundInvWords = invWordsSearch(this[start], mutableSetOf(), StringBuilder(this[start].letter), mutableSetOf(), mutableSetOf())
+        foundInvWords.add(FoundWord(this[start].letter))
+        foundInvWords.forEach {
+            if (dictionary.contains(it.word.reversed())) setOfWords.add(it.word.reversed())
+            val foundWords = wordsSearch(this[start], it.visitedVertex, StringBuilder(""), mutableSetOf(), it)
+            foundWords.forEach { foundWord -> setOfWords.add(foundWord) }
+        }
+        return setOfWords
+    }
 
-    private fun dfs(start: Vertex, finish: Vertex, visited: Set<Vertex>): Int? =
-            if (start == finish) 0
-            else {
-                val min = start.neighbors.filter { it !in visited }
-                        .map { dfs(it, finish, visited + start) }
-                        .filterNotNull().min()
-                if (min == null) null else min + 1
+    private fun invWordsSearch(start: Vertex, visited: MutableSet<Vertex>, word: StringBuilder,
+                               setOfWords: MutableSet<FoundWord>, visitedForWord: MutableSet<Vertex>): MutableSet<FoundWord> {
+        val min = start.neighbors.filter { it !in visited }
+        visited.add(start)
+        visitedForWord.add(start)
+        min.forEach {
+            word.append(it.letter)
+            println("invWords is: $word")
+            if (invDictionary.contains(word.toString())) {
+                val foundWord = FoundWord(word.toString())
+                visitedForWord.add(it)
+                foundWord.visitedVertex = visitedForWord
+                setOfWords.add(foundWord)
             }
+            if (!invDictionary.isWordHaveEnding(word.toString())) {
+                if (word.isNotEmpty()) word.setLength(word.length - 1)
+                return@forEach
+            }
+            invWordsSearch(it, visited, word, setOfWords, visitedForWord)
+        }
+        visited.remove(start)
+        if (word.isNotEmpty()) word.setLength(word.length - 1)
+        return setOfWords
+    }
 
+    private fun wordsSearch(start: Vertex, visited: MutableSet<Vertex>, word: StringBuilder,
+                            setOfWords: MutableSet<String>, usedWord: FoundWord): Set<String> {
+        val min = start.neighbors.filter { it !in visited }
+        visited.add(start)
+        min.forEach {
+            word.append(it.letter)
+            val wordToCheck =  usedWord.word.reversed() + word.toString()
+            println("words is: $wordToCheck")
+            println("used word is: ${usedWord.word.reversed()}")
+            println("visited: $visited")
+            if (dictionary.contains(wordToCheck)) {
+                setOfWords.add(wordToCheck)
+            }
+            if (!dictionary.isWordHaveEnding(wordToCheck)) {
+                if (word.isNotEmpty()) word.setLength(word.length - 1)
+                return@forEach
+            }
+            wordsSearch(it, visited, word, setOfWords, usedWord)
+        }
+        visited.remove(start)
+        if (word.isNotEmpty()) word.setLength(word.length - 1)
+        return setOfWords
+    }
 }
-
-
