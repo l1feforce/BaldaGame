@@ -36,6 +36,7 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
             addWordToUsedWords(word)
             viewState.winnerChecking()
             viewState.cancelTimerAndStartNew()
+            viewState.addWordToScrollView()
         } else {
             viewState.cancelTurn()
             viewState.showSnackCancelTurn()
@@ -47,6 +48,7 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
             showLongToastTimeIsOver()
             cleanBoardBeforeNextTurn()
             changeTurnWhenTimeIsEnd()
+            skipTurnWhenTimeIsOver()
         }
     }
 
@@ -65,7 +67,11 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
             if (vertex.letter.isBlank()) {
                 listOfLetters.forEach { newLetter ->
                     vertex.letter = newLetter
-                    field.wordsSearch(vertexName).forEach { mapOfWordCell[it] = vertexName to newLetter }
+                    field.wordsSearch(vertexName).forEach {
+                        mapOfWordCell[it] = vertexName to newLetter
+                        println("word is: $it")
+                        println("letterCell is: $vertexName")
+                    }
                     vertex.letter = " "
                 }
             }
@@ -79,10 +85,11 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
 
     fun makeBotTurn() {
         val wordToTurn = getWordForTurn()
-        val letterNumber = wordToTurn!!.value.first.split("cell")[1][0].toString().toInt() * 5 +
-                wordToTurn.value.first.split("cell")[1][1].toString().toInt() + 1
-        viewState.setLetter(letterNumber, wordToTurn?.key)
-        GameFieldModel.word = wordToTurn?.key!!
+        val letterNumber = wordToTurn!!.value.first[4].toString().toInt() * 5 +
+                wordToTurn.value.first[5].toString().toInt()
+        viewState.setLetter(letterNumber, wordToTurn.value.second)
+        GameFieldModel.word = wordToTurn.key
         turnIsMade()
+        viewState.addNewLetter()
     }
 }

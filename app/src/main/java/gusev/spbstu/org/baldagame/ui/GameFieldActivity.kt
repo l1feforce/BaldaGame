@@ -4,18 +4,23 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AlertDialog
+import android.transition.Fade
+import android.transition.TransitionManager
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.get
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.transitionseverywhere.ChangeText
 import gusev.spbstu.org.baldagame.R
 import gusev.spbstu.org.baldagame.action
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToDictionary
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToUsedWords
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.field
+import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.itWasFirstPlayerTurn
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.usedWords
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.word
 import gusev.spbstu.org.baldagame.mvp.model.Player
@@ -24,10 +29,7 @@ import gusev.spbstu.org.baldagame.mvp.views.GameFieldView
 import gusev.spbstu.org.baldagame.snack
 import kotlinx.android.synthetic.main.add_new_letter_dialog.view.*
 import kotlinx.android.synthetic.main.game_field.*
-import org.jetbrains.anko.forEachChild
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import java.lang.Math.pow
 import java.lang.Math.sqrt
 import kotlin.collections.set
@@ -54,8 +56,13 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 intent.getStringExtra("timeToTurn") ?: "")
 
         botGame = intent.extras.getBoolean("botGame")
+        timeRemains.setOnClickListener {
+            word = "балда"
+            addWordToScrollView()
+        }
         addNewLetter()
     }
+
 
     override fun onBackPressed() {
         count++
@@ -210,7 +217,46 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
     override fun setLetter(letterNumber: Int, letter: String?) {
         val cell = gameField[letterNumber]
+        com.transitionseverywhere.TransitionManager.beginDelayedTransition(gameField,
+                ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
         (cell as TextView).text = letter?.toUpperCase()
+    }
+
+
+    override fun addWordToScrollView() {
+        val newTextView = TextView(this)
+        val fade = Fade()
+        fade.duration = 700
+        TransitionManager.beginDelayedTransition(firstRow, fade)
+        TransitionManager.beginDelayedTransition(secondRow, fade)
+        newTextView.apply {
+            text = "${word.toUpperCase()} - ${word.length}"
+            topPadding = dip(2)
+            leftPadding = dip(20)
+            setTextColor(Color.parseColor("#FFFFFF"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+        if (!itWasFirstPlayerTurn) firstRow.addView(newTextView)
+        else {
+            newTextView.leftPadding = dip(64)
+            secondRow.addView(newTextView)
+        }
+    }
+
+    override fun skipTurnWhenTimeIsOver() {
+        val newTextView = TextView(this)
+        newTextView.apply {
+            text = "-"
+            topPadding = dip(2)
+            leftPadding = dip(20)
+            setTextColor(Color.parseColor("#FFFFFF"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+        if (!itWasFirstPlayerTurn) firstRow.addView(newTextView)
+        else {
+            newTextView.leftPadding = dip(64)
+            secondRow.addView(newTextView)
+        }
     }
 
     override fun onPause() {

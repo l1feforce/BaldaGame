@@ -33,4 +33,6 @@ interface GameFieldView : MvpView {
     fun winnerChecking()
     fun setLettersForFieldModel()
     fun setLetter(letterNumber: Int, letter: String?)
+    fun addWordToScrollView()
+    fun skipTurnWhenTimeIsOver()
 }

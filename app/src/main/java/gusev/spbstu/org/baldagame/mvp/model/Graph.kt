@@ -70,7 +70,6 @@ class Graph {
         visitedForWord.add(start)
         min.forEach {
             word.append(it.letter)
-            println("invWords is: $word")
             if (invDictionary.contains(word.toString())) {
                 val foundWord = FoundWord(word.toString())
                 visitedForWord.add(it)
@@ -95,9 +94,6 @@ class Graph {
         min.forEach {
             word.append(it.letter)
             val wordToCheck =  usedWord.word.reversed() + word.toString()
-            println("words is: $wordToCheck")
-            println("used word is: ${usedWord.word.reversed()}")
-            println("visited: $visited")
             if (dictionary.contains(wordToCheck)) {
                 setOfWords.add(wordToCheck)
             }
