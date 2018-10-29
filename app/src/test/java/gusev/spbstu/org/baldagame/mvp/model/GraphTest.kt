@@ -1,6 +1,5 @@
 package gusev.spbstu.org.baldagame.mvp.model
 
-import gusev.spbstu.org.baldagame.PrefixTree
 import org.junit.Test
 
 class GraphTest {
@@ -38,7 +37,7 @@ class GraphTest {
         "балда".forEachIndexed { index, c ->
             field["cell2$index"].letter = c.toString()
         }
-        //field["cell11"].letter = "к"
+        field["cell11"].letter = "к"
 
         //field["cell10"].letter = "о"
         //field["cell13"].letter = "ы"
