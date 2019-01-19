@@ -79,8 +79,8 @@ class NewGameFragment : MvpAppCompatDialogFragment(), NewGameView {
         longToast(R.string.wrong_word_length)
     }
 
-    override fun setMainWord(randomWord: String) {
-        mainWord.setText(randomWord)
+    override fun setMainWord(word: String) {
+        mainWord.setText(word)
     }
 
 }

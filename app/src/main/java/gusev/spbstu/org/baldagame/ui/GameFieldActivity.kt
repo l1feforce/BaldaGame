@@ -30,8 +30,6 @@ import gusev.spbstu.org.baldagame.snack
 import kotlinx.android.synthetic.main.add_new_letter_dialog.view.*
 import kotlinx.android.synthetic.main.game_field.*
 import org.jetbrains.anko.*
-import java.lang.Math.pow
-import java.lang.Math.sqrt
 import kotlin.collections.set
 
 class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
@@ -55,11 +53,8 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 intent.getStringExtra("mainWord") ?: "балда",
                 intent.getStringExtra("timeToTurn") ?: "")
 
+
         botGame = intent.extras.getBoolean("botGame")
-        timeRemains.setOnClickListener {
-            word = "балда"
-            addWordToScrollView()
-        }
         addNewLetter()
     }
 
@@ -74,7 +69,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     override fun addNewLetter() {
-        if (botGame && !GameFieldModel.itWasFirstPlayerTurn) {
+        if (botGame && !itWasFirstPlayerTurn) {
             presenter.makeBotTurn()
         } else {
             gameField.forEachChild {
@@ -90,18 +85,19 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     private fun findNearestCell(event: MotionEvent): TextView {
-        var min: Pair<TextView, Int> = cell00 to 1000
+        var min = cell00
         gameField.forEachChild {
             val viewCoordinates = IntArray(2)
             it.getLocationOnScreen(viewCoordinates)
             listOfCellsCoors[it as TextView] = "${viewCoordinates[0]}:${viewCoordinates[1]}"
         }
         listOfCellsCoors.forEach { textView, s ->
-            val distance = sqrt(pow((event.x.toInt() - s.split(":")[0].toInt()).toDouble(), 2.0) +
-                    pow((event.y.toInt() - s.split(":")[1].toInt()).toDouble(), 2.0))
-            if (distance < min.second) min = textView to distance.toInt()
+            if (event.x.toInt() > s.split(":")[0].toInt() + 10 && event.x.toInt() < s.split(":")[0].toInt() + textView.width - 10 &&
+                    event.y.toInt() > s.split(":")[1].toInt() + 10 && event.y.toInt() < s.split(":")[1].toInt() + textView.height - 10) {
+                min = textView
+            }
         }
-        return min.first
+        return min
     }
 
     override fun addNewWord() {
@@ -304,7 +300,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     override fun changeTurn() {
-        if (GameFieldModel.itWasFirstPlayerTurn) {
+        if (itWasFirstPlayerTurn) {
             presenter.firstPlayer.addScore(word.length)
             setSecondPlayerTurn()
         } else {
@@ -315,7 +311,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     override fun changeTurnWhenTimeIsEnd() {
-        if (GameFieldModel.itWasFirstPlayerTurn) {
+        if (itWasFirstPlayerTurn) {
             setSecondPlayerTurn()
         } else {
             setFirstPlayerTurn()
@@ -413,6 +409,6 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
-        GameFieldModel.usedWords.removeAll(usedWords)
+        usedWords.removeAll(usedWords)
     }
 }

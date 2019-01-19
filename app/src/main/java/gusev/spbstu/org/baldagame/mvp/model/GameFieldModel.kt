@@ -1,21 +1,21 @@
 package gusev.spbstu.org.baldagame.mvp.model
 
+import android.content.SharedPreferences
 
 object GameFieldModel {
     private val input = javaClass.classLoader.getResourceAsStream("assets/singular.txt")
-    val dictionary = PrefixTree()
-    val invDictionary = PrefixTree()
+    var dictionary = PrefixTree()
+    var invDictionary = PrefixTree()
     val listOfLetters = listOf("а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п",
             "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я")
     val usedWords = mutableListOf("")
     var word = ""
     var itWasFirstPlayerTurn = true
     val field = Graph()
+    lateinit var prefs: SharedPreferences
     init {
         //fields graph creating
         fieldInitialization()
-        //dictionary and invDictionary init
-        dictionariesInit()
     }
 
 
@@ -39,13 +39,28 @@ object GameFieldModel {
         itWasFirstPlayerTurn = !itWasFirstPlayerTurn
     }
 
-    private fun dictionariesInit() {
-        input.bufferedReader().use { it.readLines() }.forEach { word ->
-            dictionary.insert(word)
-            word.forEachIndexed {index, _ ->
-                invDictionary.insert(word.substring(0, word.length - index).reversed())
-            }
-        }
+    fun dictionariesInit() {
+/*
+            if (prefs.getString("Dictionary", "").isNullOrBlank()) {
+*/
+                input.bufferedReader().use { it.readLines() }.forEach { word ->
+                    dictionary.insert(word)
+                    word.forEachIndexed { index, _ ->
+                        invDictionary.insert(word.substring(0, word.length - index).reversed())
+                    }
+                }
+              /*  val editor = prefs.edit()
+                val jsonDictionary = Gson().toJson(dictionary)
+                val jsonInvDictionary = Gson().toJson(invDictionary)
+                editor.putString("Dictionary", jsonDictionary)
+                editor.putString("InvDictionary", jsonInvDictionary)
+                editor.apply()
+            } else {
+                val jsonDictionary = prefs.getString("Dictionary", "")
+                val jsonInvDictionary = prefs.getString("InvDictionary", "")
+                dictionary = Gson().fromJson(jsonDictionary, PrefixTree::class.java)
+                invDictionary = Gson().fromJson(jsonInvDictionary, PrefixTree::class.java)
+            }*/
     }
 
     private fun fieldInitialization() {

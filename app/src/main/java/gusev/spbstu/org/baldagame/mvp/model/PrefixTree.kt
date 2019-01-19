@@ -1,7 +1,11 @@
 package gusev.spbstu.org.baldagame.mvp.model
 
-class PrefixTree {
-    private var root = Node()
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+
+@Parcelize
+class PrefixTree(private var root: @RawValue Node = Node()): Parcelable {
 
     data class Node(var isWord: Boolean = false, val letter: Char? = null) {
         val neighbors = mutableMapOf<Char, Node>()

@@ -55,14 +55,19 @@ dependencies {
     implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.github.okdroid:checkablechipview:1.0.2'
-    compile "com.andkulikov:transitionseverywhere:1.8.0"
-
+    implementation "com.andkulikov:transitionseverywhere:1.8.0"
+    implementation 'com.google.code.gson:gson:2.8.5'
 
 }
+
 kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+androidExtensions {
+    experimental = true
 }
 
 apply plugin: 'com.google.gms.google-services'

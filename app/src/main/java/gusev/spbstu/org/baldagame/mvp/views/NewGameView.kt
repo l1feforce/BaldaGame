@@ -6,6 +6,6 @@ interface NewGameView: MvpView {
     fun showSelector()
     fun showToast()
     fun startNewGameActivity()
-    fun setMainWord(randomWord: String)
+    fun setMainWord(word: String)
 
 }

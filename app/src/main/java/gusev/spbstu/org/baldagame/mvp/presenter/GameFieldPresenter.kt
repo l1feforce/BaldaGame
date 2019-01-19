@@ -2,7 +2,6 @@ package gusev.spbstu.org.baldagame.mvp.presenter
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToUsedWords
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.field
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.isThisWordOkay
@@ -13,10 +12,9 @@ import gusev.spbstu.org.baldagame.mvp.views.GameFieldView
 
 @InjectViewState
 class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
-
+    //val model = GameFieldModel
     lateinit var firstPlayer: Player
     lateinit var secondPlayer: Player
-    var setOfWords: MutableList<String> = mutableListOf()
 
     fun addNewLetter() {
         viewState.showNewLetterDialog()
@@ -52,7 +50,7 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
         }
     }
 
-    fun getWordForTurn(): Map.Entry<String, Pair<String, String>>? {
+    private fun getWordForTurn(): Map.Entry<String, Pair<String, String>>? {
         viewState.setLettersForFieldModel()
         val words = setLettersAndFindWords().toMutableMap()
         val newWords = mutableMapOf<String, Pair<String, String>>()
@@ -88,7 +86,7 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
         val letterNumber = wordToTurn!!.value.first[4].toString().toInt() * 5 +
                 wordToTurn.value.first[5].toString().toInt()
         viewState.setLetter(letterNumber, wordToTurn.value.second)
-        GameFieldModel.word = wordToTurn.key
+        word = wordToTurn.key
         turnIsMade()
         viewState.addNewLetter()
     }

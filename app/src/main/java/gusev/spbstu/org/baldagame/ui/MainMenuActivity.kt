@@ -1,5 +1,6 @@
 package gusev.spbstu.org.baldagame.ui
 
+import android.content.Context
 import android.os.Bundle
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,6 +18,7 @@ class MainMenuActivity : MvpAppCompatActivity(), MainMenuView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        presenter.preparePrefs(getSharedPreferences("Dictionary", Context.MODE_PRIVATE))
 
         newGame.setOnClickListener {
             presenter.newGameIsClicked(supportFragmentManager)
