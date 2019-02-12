@@ -32,4 +32,8 @@
     <string name="press_back_again">Нажмите еще раз чтобы выйти</string>
     <string name="online_game">Онлайн игра</string>
     <string name="game_with_bot">Игра с ботом</string>
+    <string name="restartGame">Начать заново</string>
+    <string name="back_to_menu">Назад в меню</string>
+    <string name="pause">Пауза</string>
+    <string name="continue_game">Продолжить</string>
 </resources>

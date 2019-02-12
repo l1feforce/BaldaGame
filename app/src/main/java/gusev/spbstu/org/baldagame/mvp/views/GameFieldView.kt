@@ -35,4 +35,5 @@ interface GameFieldView : MvpView {
     fun setLetter(letterNumber: Int, letter: String?)
     fun addWordToScrollView()
     fun skipTurnWhenTimeIsOver()
+    fun resumeAfterPause()
 }

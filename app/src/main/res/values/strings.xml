@@ -48,6 +48,10 @@
         completions."
     </string>
     <string name="game_with_bot">Game with bot</string>
+    <string name="restartGame">Restart game</string>
+    <string name="back_to_menu">Back to menu</string>
+    <string name="pause">Pause</string>
+    <string name="continue_game">Continue</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

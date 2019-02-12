@@ -40,7 +40,6 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
     var timer: CountDownTimer? = null
     var selectedCell: TextView? = null
-    private var count = 0
     var listOfCellsCoors = mutableMapOf<TextView, String>()
     var botGame = false
 
@@ -52,7 +51,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 intent.getStringExtra("secondPlayerName") ?: "",
                 intent.getStringExtra("mainWord") ?: "балда",
                 intent.getStringExtra("timeToTurn") ?: "")
-
+        pause.setOnClickListener { onBackPressed() }
 
         botGame = intent.extras.getBoolean("botGame")
         addNewLetter()
@@ -60,12 +59,9 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
 
     override fun onBackPressed() {
-        count++
-        if (count == 1) toast(R.string.press_back_again)
-        else {
-            finish()
-            moveTaskToBack(true)
-        }
+        val pauseMenuFragment = PauseMenuFragment()
+        timer?.cancel()
+        pauseMenuFragment.show(supportFragmentManager, "newGame")
     }
 
     override fun addNewLetter() {
@@ -138,11 +134,16 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
             }
 
             cancelButton.setOnClickListener {
-                cancelTurn()
                 setDefaultTextColor()
                 usedViews.removeAll(usedViews)
                 listOfCellsCoors.clear()
-                addNewLetter()
+                if (enteredWord.text.isBlank()) {
+                    cancelTurn()
+                    addNewLetter()
+                } else {
+                    cleanEnteredWord()
+                    addNewWord()
+                }
             }
             true
         }
@@ -256,6 +257,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     }
 
     override fun onPause() {
+        onBackPressed()
         super.onPause()
         timer?.cancel()
     }
@@ -269,6 +271,10 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
             val minutes = millisRemains[0].toLong() * 60 * 1000
             startTimer(seconds + minutes)
         }
+    }
+
+    override fun resumeAfterPause() {
+        onResume()
     }
 
     override fun startTimer(timeToTurnInMillis: Long) {

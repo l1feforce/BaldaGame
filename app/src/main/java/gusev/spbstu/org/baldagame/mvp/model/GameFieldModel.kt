@@ -40,27 +40,12 @@ object GameFieldModel {
     }
 
     fun dictionariesInit() {
-/*
-            if (prefs.getString("Dictionary", "").isNullOrBlank()) {
-*/
                 input.bufferedReader().use { it.readLines() }.forEach { word ->
                     dictionary.insert(word)
                     word.forEachIndexed { index, _ ->
                         invDictionary.insert(word.substring(0, word.length - index).reversed())
                     }
                 }
-              /*  val editor = prefs.edit()
-                val jsonDictionary = Gson().toJson(dictionary)
-                val jsonInvDictionary = Gson().toJson(invDictionary)
-                editor.putString("Dictionary", jsonDictionary)
-                editor.putString("InvDictionary", jsonInvDictionary)
-                editor.apply()
-            } else {
-                val jsonDictionary = prefs.getString("Dictionary", "")
-                val jsonInvDictionary = prefs.getString("InvDictionary", "")
-                dictionary = Gson().fromJson(jsonDictionary, PrefixTree::class.java)
-                invDictionary = Gson().fromJson(jsonInvDictionary, PrefixTree::class.java)
-            }*/
     }
 
     private fun fieldInitialization() {
