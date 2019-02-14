@@ -2,6 +2,7 @@ package gusev.spbstu.org.baldagame.mvp.presenter
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import gusev.spbstu.org.baldagame.BotDifficulty
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.addWordToUsedWords
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.field
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel.isThisWordOkay
@@ -12,7 +13,7 @@ import gusev.spbstu.org.baldagame.mvp.views.GameFieldView
 
 @InjectViewState
 class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
-    //val model = GameFieldModel
+
     lateinit var firstPlayer: Player
     lateinit var secondPlayer: Player
 
@@ -50,12 +51,25 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
         }
     }
 
-    private fun getWordForTurn(): Map.Entry<String, Pair<String, String>>? {
+    private fun getWordForTurn(botDifficulty: BotDifficulty): Map.Entry<String, Pair<String, String>>? {
         viewState.setLettersForFieldModel()
         val words = setLettersAndFindWords().toMutableMap()
         val newWords = mutableMapOf<String, Pair<String, String>>()
         words.forEach { if (isThisWordOkay(it.key)) newWords[it.key] = it.value }
-        return newWords.maxBy { it.key.length }
+
+        return when (botDifficulty) {
+            BotDifficulty.HARD -> newWords.maxBy { it.key.length }
+            BotDifficulty.MEDIUM -> {
+                if (firstPlayer.score >= secondPlayer.score + 5) {
+                    newWords.filter { it.key.length <= 5 }.maxBy { it.key.length }
+                } else newWords.filter { it.key.length <= 4 }.maxBy { it.key.length }
+            }
+            BotDifficulty.EASY -> {
+                if (firstPlayer.score >= secondPlayer.score + 4) {
+                    newWords.filter { it.key.length <= 4 }.maxBy { it.key.length }
+                } else newWords.filter { it.key.length <= 3 }.maxBy { it.key.length }
+            }
+        }
     }
 
     private fun setLettersAndFindWords(): Map<String, Pair<String, String>> {
@@ -81,8 +95,8 @@ class GameFieldPresenter() : MvpPresenter<GameFieldView>() {
         return field.bfs(firstCell, secondCell) == 1
     }
 
-    fun makeBotTurn() {
-        val wordToTurn = getWordForTurn()
+    fun makeBotTurn(botDifficulty: BotDifficulty) {
+        val wordToTurn = getWordForTurn(botDifficulty)
         val letterNumber = wordToTurn!!.value.first[4].toString().toInt() * 5 +
                 wordToTurn.value.first[5].toString().toInt()
         viewState.setLetter(letterNumber, wordToTurn.value.second)

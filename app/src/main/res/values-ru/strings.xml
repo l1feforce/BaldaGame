@@ -36,4 +36,8 @@
     <string name="back_to_menu">Назад в меню</string>
     <string name="pause">Пауза</string>
     <string name="continue_game">Продолжить</string>
+    <string name="very_hard">Очень сложно</string>
+    <string name="dynamically">Динамачная</string>
+    <string name="easy">Легко</string>
+    <string name="medium">Средне</string>
 </resources>

@@ -18,6 +18,11 @@ object GameFieldModel {
         fieldInitialization()
     }
 
+    fun clean() {
+        itWasFirstPlayerTurn = true
+        word = ""
+        usedWords.removeAll(usedWords)
+    }
 
     fun addWordToUsedWords(word: String) {
         usedWords.add(word.toLowerCase())

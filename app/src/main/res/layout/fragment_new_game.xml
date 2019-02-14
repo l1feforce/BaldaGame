@@ -61,6 +61,12 @@
             android:text="@string/game_with_bot"
             android:color="#ff8533"	/>
 
+        <Spinner
+            android:id="@+id/difficulty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -10,7 +10,7 @@ class NewGamePresenter: MvpPresenter<NewGameView>() {
 
 
     fun setTimerIsClicked() {
-        viewState.showSelector()
+        viewState.showTimeToTurnSelector()
     }
 
     fun startNewGame(mainWord: String) {

@@ -52,6 +52,10 @@
     <string name="back_to_menu">Back to menu</string>
     <string name="pause">Pause</string>
     <string name="continue_game">Continue</string>
+    <string name="very_hard">Very hard</string>
+    <string name="dynamically">Dynamically</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

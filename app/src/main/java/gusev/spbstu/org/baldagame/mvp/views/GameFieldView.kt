@@ -6,11 +6,6 @@ import gusev.spbstu.org.baldagame.mvp.model.Player
 interface GameFieldView : MvpView {
 
     fun addNewLetter()
-
-
-    fun prepareGameFieldForStart(firstPlayerName: String, secondPlayerName: String,
-                                 mainWord: String, timeToTurn: String)
-
     fun makeFullScreen()
     fun makeFieldNotClickable()
     fun setDefaultTextColor()
@@ -36,4 +31,5 @@ interface GameFieldView : MvpView {
     fun addWordToScrollView()
     fun skipTurnWhenTimeIsOver()
     fun resumeAfterPause()
+    fun prepareGameFieldForStart(firstPlayerName: String, secondPlayerName: String, mainWord: String, timeToTurn: String)
 }

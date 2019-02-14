@@ -14,6 +14,7 @@ import androidx.core.view.get
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.transitionseverywhere.ChangeText
+import gusev.spbstu.org.baldagame.BotDifficulty
 import gusev.spbstu.org.baldagame.R
 import gusev.spbstu.org.baldagame.action
 import gusev.spbstu.org.baldagame.mvp.model.GameFieldModel
@@ -42,6 +43,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
     var selectedCell: TextView? = null
     var listOfCellsCoors = mutableMapOf<TextView, String>()
     var botGame = false
+    lateinit var botDifficulty: BotDifficulty
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,12 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
         pause.setOnClickListener { onBackPressed() }
 
         botGame = intent.extras.getBoolean("botGame")
+        val difficulty = intent.getStringExtra("difficulty")
+        botDifficulty = when(difficulty) {
+            resources.getString(R.string.easy) -> BotDifficulty.EASY
+            resources.getString(R.string.very_hard) -> BotDifficulty.HARD
+            else -> BotDifficulty.MEDIUM
+        }
         addNewLetter()
     }
 
@@ -66,7 +74,7 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
 
     override fun addNewLetter() {
         if (botGame && !itWasFirstPlayerTurn) {
-            presenter.makeBotTurn()
+            presenter.makeBotTurn(botDifficulty)
         } else {
             gameField.forEachChild {
                 it as TextView
@@ -104,7 +112,9 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
         mainLayout.setOnTouchListener { _, event ->
             val cell = findNearestCell(event)
 
-            var isThoseCellsIsNeighbors = presenter.isThisCellsNeighbors(resources.getResourceEntryName(cell.id), resources.getResourceEntryName(lastUsedCell?.id
+            var isThoseCellsIsNeighbors =
+                    presenter.isThisCellsNeighbors(resources.getResourceEntryName(cell.id),
+                            resources.getResourceEntryName(lastUsedCell?.id
                     ?: cell.id))
             if (lastUsedCell == null) isThoseCellsIsNeighbors = true
 
@@ -218,7 +228,6 @@ class GameFieldActivity : MvpAppCompatActivity(), GameFieldView {
                 ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
         (cell as TextView).text = letter?.toUpperCase()
     }
-
 
     override fun addWordToScrollView() {
         val newTextView = TextView(this)
