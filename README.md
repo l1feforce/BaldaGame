@@ -1,5 +1,6 @@
 # BaldaGame
 ## TODO
+- [ ] New design
 - [ ] Splash screen
 - [ ] Adding words in dictionary (in which way?)
 - [ ] Words meaning
