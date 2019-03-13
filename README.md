@@ -7,6 +7,7 @@
 - [ ] Online game (firebase?)
 - [ ] Code refactoring
 - [ ] Hide screen in trey
+- [ ] Animate bot turn
 ## Description
 This is a project of russian game with words called "Balda" made on android on the kotlin using the Anko library. Now you can play in this game with field 5x5 with timer.
 ## How to play?
